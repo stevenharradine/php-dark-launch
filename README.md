@@ -1,5 +1,7 @@
 # Dark Launch Codeigniter
 
+[![Join the chat at https://gitter.im/telusdigital/php-dark-launch](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/telusdigital/php-dark-launch?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 A CodeIgniter library to dark launch features
 
 [What is dark launching?](http://changelog.ca/log/2012/07/19/dark_launching_software_features)
@@ -21,6 +23,10 @@ composer require telusdigital/darklaunch
 ```
 
 ## Usage
+- [Tunables](#tunables)
+- [Config](#config)
+
+
 Initialize a Dark Launch object:
 
 ```php
@@ -49,7 +55,7 @@ $redis->connection('127.0.0.1');
 // $config
 // this can be from a codeigniter config  
 // e.g $this->load->config('dark_launch');
-//     $this->config->item('dark_launch_features');
+//     $config = $this->config->item('dark_launch_features');
 $config = ['feature-1' => ['type' => 'boolean', 'value' => TRUE], 'feature-1' => ['type' => percentage, 'value' => 30]];
 
 // passing params to Dark_Launch constructor

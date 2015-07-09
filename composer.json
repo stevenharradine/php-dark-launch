@@ -1,0 +1,29 @@
+{
+    "name": "telusdigital/darklaunch",
+    "type": "library",
+    "description": "Dark Launching for PHP",
+    "require": {
+        "php": "^5.3.3"
+    },
+    "require-dev": {
+        "behat/behat": "^3.0@dev"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ben Visser",
+            "email": "benjamin.visser@telus.com"
+        },  
+        {
+            "name": "Prashant Kandathil",
+            "email": "prashant@techsamurais.com"
+        }
+    ],
+   "autoload": {
+        "classmap": [
+            "src/"
+        ]
+    },
+    "include-path": ["src/"],
+    "minimum-stability": "dev"
+}

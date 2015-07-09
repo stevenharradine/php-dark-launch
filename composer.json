@@ -2,6 +2,7 @@
     "name": "telusdigital/darklaunch",
     "type": "library",
     "description": "Dark Launching for PHP",
+    "homepage": "https://github.com/telusdigital/php-dark-launch",
     "require": {
         "php": "^5.3.3"
     },

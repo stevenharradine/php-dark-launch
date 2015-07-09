@@ -18,11 +18,17 @@ A CodeIgniter library to dark launch features
 
 1. Clone this repo 
 2. Move `application/libraries/Dark_launch.php` and `application/config/dark_launch.php` into their respective folders in your project.
-3. Use `require_once` to require the Dark Launch Library in your controllers or autoload it via your preferred method
+3. Use `require_once` to require `libraries/Dark_launch.php` in your controllers or autoload it via your preferred method
 
 ## Usage
-  
+
 // TODO: write usage
+
+### Tunables:
+// $redis - send a redis instance to it 
+// $project - the name of the project e.g uss-consumer
+// $user - the name of the user dark launching e.g x173034
+  
 
 ## Methods
 

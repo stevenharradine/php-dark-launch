@@ -21,6 +21,10 @@ composer require telusdigital/darklaunch
 ```
 
 ## Usage
+- [Tunables](#tunables)
+- [Config](#config)
+
+
 Initialize a Dark Launch object:
 
 ```php

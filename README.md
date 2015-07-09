@@ -18,7 +18,7 @@ A CodeIgniter library to dark launch features
 ## Installation
 
 ```
-composer require telusdigital/darklaunch 
+composer require telusdigital/darklaunch
 ```
 
 ## Usage
@@ -122,6 +122,7 @@ $this->dark_launch->set_feature($feature_name, $feature_value);
 [MIT](https://tldrlegal.com/license/mit-license)
 
 ## Contributors
+* Layne Geck | [email](mailto:layne@techsamurais.com)
 * Prashant Kandathil | [email](mailto:prashant@techsamurais.com)
 * Ben Visser | [email](mailto:benjamin.visser@telus.com)
 

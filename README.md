@@ -62,21 +62,57 @@ $dark_launch = new Dark_Launch($params);
 Dark Launch defaults can be one of three types
 
 1. boolean
-
-2. time
-
-3. percentage
-
-## Methods
-
-// TODO: write methods
-
-### feature_enabled()
-Check if a feature is enabled
+A feature is enabled when value is TRUE
 ```php
-$this->dark_launch->feature_enabled();
+['type' => 'boolean', 'value' => TRUE]
 ```
 
+2. time
+A feature is enabled if in between start and stop time
+```php
+['type' => 'time', 'start' => 1419451200, 'stop' => 1420056000]
+```
+
+3. percentage
+A feature is enabled X % of the time
+```php
+['type' => 'percentage', 'value' => 30]
+```
+## Methods
+
+### feature_enabled()
+Returns TRUE if a feature is enabled
+```php
+$this->dark_launch->feature_enabled('my-awesome-feature');
+```
+### projects()
+Returns a list of projects
+```php
+$this->dark_launch->projects();
+```
+### users()
+Returns a list of users for a project
+```php
+$this->dark_launch->users();
+```
+### features()
+Returns a list of features for a project and user
+```php
+$this->dark_launch->features();
+```
+### get_feature()
+Returns an associative array with attributes about a feature
+```php
+$this->dark_launch->get_feature('my-awesome-feature');
+// return = ['type' => 'boolean', 'value' => 'true']
+```
+### set_feature()
+Sets a dark launch feature
+```php
+$feature_name = 'my-awesome-feature'
+$feature_value = ['type' => 'percent', 'value' => 30]
+$this->dark_launch->set_feature($feature_name, $feature_value);
+```
 ## License
 [MIT](https://tldrlegal.com/license/mit-license)
 

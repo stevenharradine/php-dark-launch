@@ -25,10 +25,10 @@ A CodeIgniter library to dark launch features
 // TODO: write usage
 
 ### Tunables:
-// $redis - send a redis instance to it 
-// $project - the name of the project e.g uss-consumer
-// $user - the name of the user dark launching e.g x173034
-  
+- // $redis - send a redis instance to it 
+- // $project - the name of the project e.g uss-consumer
+- // $user - the name of the user dark launching e.g x173034
+
 
 ## Methods
 

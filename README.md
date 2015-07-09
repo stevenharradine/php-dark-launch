@@ -15,7 +15,6 @@ A CodeIgniter library to dark launch features
 - [Contributors](#contributors)
 - [TODO](#TODO)
 
-
 ## Installation
 
 ```

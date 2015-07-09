@@ -53,7 +53,7 @@ $redis->connection('127.0.0.1');
 // $config
 // this can be from a codeigniter config  
 // e.g $this->load->config('dark_launch');
-//     $this->config->item('dark_launch_features');
+//     $config = $this->config->item('dark_launch_features');
 $config = ['feature-1' => ['type' => 'boolean', 'value' => TRUE], 'feature-1' => ['type' => percentage, 'value' => 30]];
 
 // passing params to Dark_Launch constructor

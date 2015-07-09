@@ -16,19 +16,53 @@ A CodeIgniter library to dark launch features
 
 ## Installation
 
-1. Clone this repo 
-2. Move `application/libraries/Dark_launch.php` and `application/config/dark_launch.php` into their respective folders in your project.
-3. Use `require_once` to require `libraries/Dark_launch.php` in your controllers or autoload it via your preferred method
+``` composer require telusdigital/darklaunch ```
 
 ## Usage
+Initialize a Dark Launch object:
 
-// TODO: write usage
+```php
+use TelusDigital\Dark_Launch;
+
+// Dark Launching requires a redis instance to use
+$redis = new Redis();
+$redis->connection('127.0.0.1');
+
+$params = ['redis' => $redis];
+$dark_launch = new Dark_Launch($params);
+```
 
 ### Tunables:
-- // $redis - send a redis instance to it 
-- // $project - the name of the project e.g uss-consumer
-- // $user - the name of the user dark launching e.g x173034
+- $redis - obj - send a redis instance to it 
+- $project - string  the name of the project
+- $user - string - the name of the user dark launching
+- $config - array - an array of default dark launch values
 
+```php
+// $redis
+$redis = new Redis();
+$redis->connection('127.0.0.1');
+
+
+// $config
+// this can be from a codeigniter config  
+// e.g $this->load->config('dark_launch');
+//     $this->config->item('dark_launch_features');
+// see [config](#config) for more information
+
+$config = ['feature-1' => ['type' => 'boolean', 'value' => TRUE], 'feature-1' => ['type' => percentage, 'value' => 30]];
+
+// passing params to Dark_Launch constructor
+$params = ['redis' => $redis, 'config' => $config, 'user' => 'ben', 'project' => 'my-awesome-project']
+$dark_launch = new Dark_Launch($params);
+```
+
+### Config
+
+Dark Launch defaults can be one of three types
+1. boolean
+2. time
+3. percentage
 
 ## Methods
 

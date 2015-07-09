@@ -16,7 +16,9 @@ A CodeIgniter library to dark launch features
 
 ## Installation
 
-``` composer require telusdigital/darklaunch ```
+```
+composer require telusdigital/darklaunch 
+```
 
 ## Usage
 Initialize a Dark Launch object:

@@ -3,12 +3,6 @@
     "type": "library",
     "description": "Dark Launching for PHP",
     "homepage": "https://github.com/telusdigital/php-dark-launch",
-    "require": {
-        "php": "^5.3.3"
-    },
-    "require-dev": {
-        "behat/behat": "^3.0@dev"
-    },
     "license": "MIT",
     "authors": [
         {
@@ -20,6 +14,16 @@
             "email": "prashant@techsamurais.com"
         }
     ],
+    "require": {
+        "php": "^5.3.3"
+    },
+    "require-dev": {
+        "behat/behat": "^3.0@dev",
+        "phpunit/phpunit": "4.7.*"
+    },
+    "config": {
+        "bin-dir": "bin/"
+    },
    "autoload": {
         "classmap": [
             "src/"

@@ -48,8 +48,6 @@ $redis->connection('127.0.0.1');
 // this can be from a codeigniter config  
 // e.g $this->load->config('dark_launch');
 //     $this->config->item('dark_launch_features');
-// see [config](#config) for more information
-
 $config = ['feature-1' => ['type' => 'boolean', 'value' => TRUE], 'feature-1' => ['type' => percentage, 'value' => 30]];
 
 // passing params to Dark_Launch constructor
@@ -60,8 +58,11 @@ $dark_launch = new Dark_Launch($params);
 ### Config
 
 Dark Launch defaults can be one of three types
+
 1. boolean
+
 2. time
+
 3. percentage
 
 ## Methods

@@ -111,12 +111,18 @@ Returns an associative array with attributes about a feature
 $this->dark_launch->get_feature('my-awesome-feature');
 // return = ['type' => 'boolean', 'value' => 'true']
 ```
-### set_feature()
-Sets a dark launch feature
+### enable_feature()
+Enables a dark launch feature
 ```php
 $feature_name = 'my-awesome-feature'
 $feature_value = ['type' => 'percent', 'value' => 30]
-$this->dark_launch->set_feature($feature_name, $feature_value);
+$this->dark_launch->enable_feature($feature_name, $feature_value);
+```
+
+### disable_feature()
+Disables a dark launch feature
+```php
+$this->dark_launch->disable_feature('my-awesome-feature');
 ```
 ## License
 [MIT](https://tldrlegal.com/license/mit-license)

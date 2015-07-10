@@ -56,9 +56,9 @@ class Dark_Launch
   * @param $feature string - The name of the feature
   * @return boolean - True if a feature is enabled, false if not
   */
-  public function feature_enabled($feature)
+  public function feature_enabled($feature_name)
   {
-    $feature_data = $this->get_feature($feature);
+    $feature_data = $this->get_feature($feature_name);
     return $this->_parse($feature_data);
   }
 
@@ -98,16 +98,16 @@ class Dark_Launch
   * @param $feature string - The namespace when accessing redis
   * @return An array of values - The hash keys and values for the feature
   */
-  public function get_feature($feature)
+  public function get_feature($feature_name)
   {
-    $feature = str_replace('_','-', $feature);
-    $dark_launch_feature = $this->redis->hgetall("{$this->_feature_namespace()}:feature:{$feature}");
+    $feature_name = str_replace('_','-', $feature_name);
+    $dark_launch_feature = $this->redis->hgetall("{$this->_feature_namespace()}:feature:{$feature_name}");
 
     if(!$dark_launch_feature){
       $this->_init_features();
-      $dark_launch_feature = $this->redis->hgetall("{$this->_feature_namespace()}:feature:{$feature}");
+      $dark_launch_feature = $this->redis->hgetall("{$this->_feature_namespace()}:feature:{$feature_name}");
     }
-    return $dark_launch_feature ? $dark_launch_feature : $this->_return_error($feature);
+    return $dark_launch_feature ? $dark_launch_feature : $this->_return_error($feature_name);
   }
 
 
@@ -116,12 +116,22 @@ class Dark_Launch
   * @param $feature_name string - The name of the feature
   * @param $feature_values array - An associative array of the features keys and values
   */
-  public function set_feature($feature_name, $feature_values)
+  public function enable_feature($feature_name, $feature_values)
   {
     $feature_name = str_replace('_','-', $feature_name);
     $this->redis->hmset("{$this->_feature_namespace()}:feature:{$feature_name}", $feature_values);
   }
 
+
+  /**
+  * Disable a dark launch feature
+  * @param $feature string - The name of the feature
+  */
+  public function disable_feature($feature_name)
+  {
+    $feature_name = str_replace('_','-', $feature_name);
+    $this->redis->hrem("{$this->_feature_namespace()}:feature", $feature_name);
+  }
 
   ////////////////////
   ////// PRIVATE /////

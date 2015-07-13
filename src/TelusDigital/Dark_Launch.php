@@ -58,7 +58,7 @@ class Dark_Launch
   */
   public function feature_enabled($feature_name)
   {
-    $feature_data = $this->get_feature($feature_name);
+    $feature_data = $this->feature($feature_name);
     return $this->_parse($feature_data);
   }
 
@@ -89,16 +89,16 @@ class Dark_Launch
   */
   public function features()
   {
-    $features_list = $this->redis->smembers("dark-launch:project:uss-consumer:user:global:features");
+    $features_list = $this->redis->smembers("{$this->_feature_namespace()}:features");
     $pipe = $this->redis->multi(Redis::PIPELINE);
     foreach($features_list as $feature){
-      $pipe->hgetall("dark-launch:project:telus-commerce:user:global:feature:{$feature}");
+      $pipe->hgetall("{$this->_feature_namespace()}:feature:{$feature}");
     }
     $feature_data = $pipe->exec();
 
     $features = [];
     foreach($features_list as $key => $feature){
-      $associated_array[$feature] = $feature_data[$key];
+      $features[$feature] = $feature_data[$key];
     }
     return $features;
   }
@@ -109,7 +109,7 @@ class Dark_Launch
   * @param $feature string - The namespace when accessing redis
   * @return An array of values - The hash keys and values for the feature
   */
-  public function get_feature($feature_name)
+  public function feature($feature_name)
   {
     $feature_name = str_replace('_','-', $feature_name);
     $dark_launch_feature = $this->redis->hgetall("{$this->_feature_namespace()}:feature:{$feature_name}");
@@ -212,7 +212,7 @@ class Dark_Launch
     if(isset($features)){
       if(is_array($features)){
         foreach($features as $key => $value){
-          $this->set_feature($key, $features[$key]);
+          $this->enable_feature($key, $features[$key]);
         }
       }
     }

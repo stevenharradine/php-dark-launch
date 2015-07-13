@@ -89,7 +89,18 @@ class Dark_Launch
   */
   public function features()
   {
-    return $this->redis->smembers("{$this->_feature_namespace()}:features");
+    $features_list = $redis->smembers("dark-launch:project:uss-consumer:user:global:features");
+    $pipe = $redis->multi(Redis::PIPELINE);
+    foreach($features_list as $feature){
+      $pipe->hgetall("dark-launch:project:telus-commerce:user:global:feature:{$feature}");
+    }
+    $feature_data = $pipe->exec();
+
+    $features = [];
+    foreach($features_list as $key => $feature){
+      $associated_array[$feature] = $feature_data[$key];
+    }
+    return $features;
   }
 
 
@@ -119,7 +130,10 @@ class Dark_Launch
   public function enable_feature($feature_name, $feature_values)
   {
     $feature_name = str_replace('_','-', $feature_name);
-    $this->redis->hmset("{$this->_feature_namespace()}:feature:{$feature_name}", $feature_values);
+    $multi = $this->redis->multi();
+    $multi->hmset("{$this->_feature_namespace()}:feature:{$feature_name}", $feature_values);
+    $multi->sadd("{$this->_feature_namespace()}:features", $feature_name);
+    $multi->exec();
   }
 
 

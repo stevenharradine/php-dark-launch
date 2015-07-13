@@ -89,8 +89,8 @@ class Dark_Launch
   */
   public function features()
   {
-    $features_list = $redis->smembers("dark-launch:project:uss-consumer:user:global:features");
-    $pipe = $redis->multi(Redis::PIPELINE);
+    $features_list = $this->redis->smembers("dark-launch:project:uss-consumer:user:global:features");
+    $pipe = $this->redis->multi(Redis::PIPELINE);
     foreach($features_list as $feature){
       $pipe->hgetall("dark-launch:project:telus-commerce:user:global:feature:{$feature}");
     }

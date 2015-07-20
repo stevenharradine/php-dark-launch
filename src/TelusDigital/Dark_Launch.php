@@ -128,7 +128,10 @@ class Dark_Launch
   * @param $feature_values array - An associative array of the features keys and values
   */
   public function enable_feature($feature_name, $feature_values)
-  {
+  { 
+    if(!is_array($feature_values)){
+      $feature_values = (array)$feature_values;
+    }
     $feature_name = str_replace('_','-', $feature_name);
     $multi = $this->redis->multi();
     $multi->hmset("{$this->_feature_namespace()}:feature:{$feature_name}", $feature_values);
@@ -144,7 +147,10 @@ class Dark_Launch
   public function disable_feature($feature_name)
   {
     $feature_name = str_replace('_','-', $feature_name);
-    $this->redis->hrem("{$this->_feature_namespace()}:feature", $feature_name);
+    $multi = $this->redis->multi();
+    $this->redis->hdel("{$this->_feature_namespace()}:feature", $feature_name);
+    $this->redis->srem("{$this->_feature_namespace()}:features", $feature_name);
+    $multi->exec();
   }
 
   ////////////////////
@@ -227,7 +233,7 @@ class Dark_Launch
   private function _parse($feature){
     if(is_array($feature)){
       $type = $feature['type'];
-      return $this->{'_parse_'.$type}($feature);
+      return $this->{'parse_'.$type}($feature);
     } else {
       return FALSE;
     }
@@ -239,7 +245,7 @@ class Dark_Launch
   * @param $feature array - An associative array of the features attributes
   * @return boolean
   */
-  private function _parse_boolean($feature)
+  public function parse_boolean($feature)
   {
     if(!isset($feature['value'])){
       throw new Exception('Invalid dark launch config: missing feature value');
@@ -254,7 +260,7 @@ class Dark_Launch
   * @return boolean TRUE if feature is enabled
   * Exception is thrown when stop time is before end time
   */
-  private function _parse_time($feature)
+  public function parse_time($feature)
   {
     if(!isset($feature['start']) OR !isset($feature['stop'])){
       throw new Exception('Invalid dark launch config: missing feature start and stop time');
@@ -265,7 +271,7 @@ class Dark_Launch
       return FALSE;
     }
 
-    if($this->_time_is_valid($feature['start'], $feature['stop'])){
+    if($this->time_is_valid($feature['start'], $feature['stop'])){
       return TRUE;
     } else {
       return FALSE;
@@ -279,7 +285,7 @@ class Dark_Launch
   * @param $stop int - A unix time of stop time
   * @return boolean TRUE if in between start and stop time
   */
-  private function _time_is_valid($start, $stop)
+  public function time_is_valid($start, $stop)
   {
     if($start < time() AND is_null($stop)) {
       return TRUE;
@@ -296,7 +302,7 @@ class Dark_Launch
   * @param $feature array - A associative array of the features attributes
   * @return boolean
   */
-  private function _parse_percentage($feature)
+  public function parse_percentage($feature)
   {
     if(!isset($feature['value'])){
       throw new Exception('Invalid dark launch config: missing feature value.');

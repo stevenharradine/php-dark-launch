@@ -148,7 +148,7 @@ class Dark_Launch
   {
     $feature_name = str_replace('_','-', $feature_name);
     $multi = $this->redis->multi();
-    $this->redis->hdel("{$this->_feature_namespace()}:feature", $feature_name);
+    $this->redis->del("{$this->_feature_namespace()}:feature:{$feature_name}");
     $this->redis->srem("{$this->_feature_namespace()}:features", $feature_name);
     $multi->exec();
   }

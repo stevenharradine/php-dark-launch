@@ -14,19 +14,19 @@ class Dark_Launch
   * @var string
   * The name of the project which is dark launching
   */
-  private $project = 'global';
+  protected $project = 'global';
 
   /**
   * @var string
   * The name of the user who is dark launching
   */
-  private $user = 'global';
+  protected $user = 'global';
 
   /**
   * @var Redis
   * The redis connection we shall use
   */
-  private $redis;
+  protected $redis;
 
   /**
   * @var array
@@ -34,7 +34,7 @@ class Dark_Launch
   * e.g ["feature_1" => ["type" => "boolean", "value" => TRUE], 
   *      "feature_2" => ["type" => "percentage", "value" => 30]];
   */
-  private $config;
+  protected $config;
   
   const DARK_LAUNCH_NAMESPACE = 'dark-launch';
 
@@ -59,7 +59,7 @@ class Dark_Launch
   public function feature_enabled($feature_name)
   {
     $feature_data = $this->feature($feature_name);
-    return $this->_parse($feature_data);
+    return $this->parse($feature_data);
   }
 
 
@@ -89,10 +89,10 @@ class Dark_Launch
   */
   public function features()
   {
-    $features_list = $this->redis->smembers("{$this->_feature_namespace()}:features");
+    $features_list = $this->redis->smembers("{$this->feature_namespace()}:features");
     $pipe = $this->redis->multi(Redis::PIPELINE);
     foreach($features_list as $feature){
-      $pipe->hgetall("{$this->_feature_namespace()}:feature:{$feature}");
+      $pipe->hgetall("{$this->feature_namespace()}:feature:{$feature}");
     }
     $feature_data = $pipe->exec();
 
@@ -112,11 +112,11 @@ class Dark_Launch
   public function feature($feature_name)
   {
     $feature_name = str_replace('_','-', $feature_name);
-    $dark_launch_feature = $this->redis->hgetall("{$this->_feature_namespace()}:feature:{$feature_name}");
+    $dark_launch_feature = $this->redis->hgetall("{$this->feature_namespace()}:feature:{$feature_name}");
 
     if(!$dark_launch_feature){
       $this->_init_features();
-      $dark_launch_feature = $this->redis->hgetall("{$this->_feature_namespace()}:feature:{$feature_name}");
+      $dark_launch_feature = $this->redis->hgetall("{$this->feature_namespace()}:feature:{$feature_name}");
     }
     return $dark_launch_feature ? $dark_launch_feature : $this->_return_error($feature_name);
   }
@@ -134,8 +134,8 @@ class Dark_Launch
     }
     $feature_name = str_replace('_','-', $feature_name);
     $multi = $this->redis->multi();
-    $multi->hmset("{$this->_feature_namespace()}:feature:{$feature_name}", $feature_values);
-    $multi->sadd("{$this->_feature_namespace()}:features", $feature_name);
+    $multi->hmset("{$this->feature_namespace()}:feature:{$feature_name}", $feature_values);
+    $multi->sadd("{$this->feature_namespace()}:features", $feature_name);
     $multi->exec();
   }
 
@@ -148,80 +148,9 @@ class Dark_Launch
   {
     $feature_name = str_replace('_','-', $feature_name);
     $multi = $this->redis->multi();
-    $this->redis->del("{$this->_feature_namespace()}:feature:{$feature_name}");
-    $this->redis->srem("{$this->_feature_namespace()}:features", $feature_name);
+    $this->redis->del("{$this->feature_namespace()}:feature:{$feature_name}");
+    $this->redis->srem("{$this->feature_namespace()}:features", $feature_name);
     $multi->exec();
-  }
-
-  ////////////////////
-  ////// PRIVATE /////
-  ////////////////////
-  
-
-  /**
-  * Logs and error and returns false
-  * @return boolean FALSE
-  */
-  private function _return_error($feature)
-  {
-    error_log("No dark launch value exists for: {$feature}", 0);
-    return FALSE;
-  }
-
-
-  /**
-  * Return a nice namespace for accessing a feature
-  * @return string - The namespace for a feature
-  */
-  private function _feature_namespace()
-  {
-    return $this->_user_namespace().":user:{$this->user}";
-  }
-
-
-  /**
-  * Return a nice namespace for accessing users
-  * @return string - The namespace for user
-  */
-  private function _user_namespace()
-  {
-    return $this->_project_namespace().":project:{$this->project}";
-  }
-
-
- /**
-  * Return a nice namespace for accessing projects
-  * @return string - The namespace for projects
-  */
-  private function _project_namespace()
-  {
-    return self::DARK_LAUNCH_NAMESPACE;
-  }
-
-
-  /**
-  * Adds project and user to a sets that can be easily accessed
-  */
-  private function _add_redis_set_members()
-  {
-    $this->redis->sadd($this->_project_namespace().":projects", $this->project);
-    $this->redis->sadd($this->_user_namespace().":users", $this->user);
-  }
-
-  
-  /**
-  * Sets initial values for dark launching from config
-  */
-  private function _init_features()
-  {
-    $features = $this->config;
-    if(isset($features)){
-      if(is_array($features)){
-        foreach($features as $key => $value){
-          $this->enable_feature($key, $features[$key]);
-        }
-      }
-    }
   }
 
 
@@ -230,7 +159,7 @@ class Dark_Launch
   * @param $feature array - An associative array of a features attributes
   * @return boolean TRUE if feature is enabled
   */
-  private function _parse($feature){
+  public function parse($feature){
     if(is_array($feature)){
       $type = $feature['type'];
       return $this->{'parse_'.$type}($feature);
@@ -316,6 +245,83 @@ class Dark_Launch
 
     $random_number = rand(0, 100);
     return $random_number <= $percentage ? TRUE : FALSE;
+  }
+
+
+  //////////////////////
+  ////// PROTECTED /////
+  //////////////////////
+  
+
+  /**
+  * Return a nice namespace for accessing a feature
+  * @return string - The namespace for a feature
+  */
+  protected function feature_namespace()
+  {
+    return $this->user_namespace().":user:{$this->user}";
+  }
+
+
+  /**
+  * Return a nice namespace for accessing users
+  * @return string - The namespace for user
+  */
+  protected function user_namespace()
+  {
+    return $this->project_namespace().":project:{$this->project}";
+  }
+
+
+ /**
+  * Return a nice namespace for accessing projects
+  * @return string - The namespace for projects
+  */
+  protected function project_namespace()
+  {
+    return self::DARK_LAUNCH_NAMESPACE;
+  }
+
+
+  /**
+  * Sets initial values for dark launching from config
+  */
+  protected function _init_features()
+  {
+    $features = $this->config;
+    if(isset($features)){
+      if(is_array($features)){
+        foreach($features as $key => $value){
+          $this->enable_feature($key, $features[$key]);
+        }
+      }
+    }
+  }
+
+
+  //////////////////////
+  ////// PRIVATE ///////
+  //////////////////////
+
+  
+  /**
+  * Logs and error and returns false
+  * @return boolean FALSE
+  */
+  private function _return_error($feature)
+  {
+    error_log("No dark launch value exists for: {$feature}", 0);
+    return FALSE;
+  }
+
+
+  /**
+  * Adds project and user to a sets that can be easily accessed
+  */
+  private function _add_redis_set_members()
+  {
+    $this->redis->sadd($this->project_namespace().":projects", $this->project);
+    $this->redis->sadd($this->user_namespace().":users", $this->user);
   }
 
 

@@ -1,7 +1,7 @@
 <?php
 
 /**
- *  @author Layne Geck - layne@techsamurais.com
+ *  @author Layne Geck - layne.geck@gmail.com
  *  @author Ben Visser - benjamin.visser@telus.com
  *  @author Prashant Kandathil - prashant@techsamurais.com
  *  Dark Launch Library for PHP

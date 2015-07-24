@@ -128,7 +128,7 @@ $this->dark_launch->disable_feature('my-awesome-feature');
 [MIT](https://tldrlegal.com/license/mit-license)
 
 ## Contributors
-* Layne Geck | [email](mailto:layne@techsamurais.com)
+* Layne Geck | [email](mailto:layne.geck@gmail.com)
 * Prashant Kandathil | [email](mailto:prashant@techsamurais.com)
 * Ben Visser | [email](mailto:benjamin.visser@telus.com)
 

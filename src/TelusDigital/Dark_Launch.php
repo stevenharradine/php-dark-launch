@@ -31,7 +31,7 @@ class Dark_Launch
   /**
   * @var array
   * Default values for dark launching
-  * e.g ["feature_1" => ["type" => "boolean", "value" => TRUE], 
+  * e.g ["feature_1" => ["type" => "boolean", "value" => TRUE],
   *      "feature_2" => ["type" => "percentage", "value" => 30]];
   */
   protected $config;
@@ -47,7 +47,6 @@ class Dark_Launch
     if(!isset($this->redis)){
       throw new Exception('No redis connection set');
     }
-    $this->_add_redis_set_members();
   }
 
 
@@ -128,7 +127,7 @@ class Dark_Launch
   * @param $feature_values array - An associative array of the features keys and values
   */
   public function enable_feature($feature_name, $feature_values)
-  { 
+  {
     if(!is_array($feature_values)){
       $feature_values = (array)$feature_values;
     }
@@ -235,7 +234,7 @@ class Dark_Launch
   {
     if(!isset($feature['value'])){
       throw new Exception('Invalid dark launch config: missing feature value.');
-    } 
+    }
 
     $percentage = $feature['value'];
     if($percentage < 0 OR $percentage > 100) {
@@ -288,6 +287,9 @@ class Dark_Launch
   */
   protected function _init_features()
   {
+    //add set members for user & project
+    $this->_add_redis_set_members();
+    
     $features = $this->config;
     if(isset($features)){
       if(is_array($features)){

@@ -48,7 +48,7 @@ $dark_launch = new Dark_Launch($params);
 ```php
 // $redis
 $redis = new Redis();
-$redis->connection('127.0.0.1');
+$redis->connect('127.0.0.1');
 
 
 // $config

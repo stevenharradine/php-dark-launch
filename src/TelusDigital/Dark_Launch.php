@@ -115,7 +115,7 @@ class Dark_Launch
     $dark_launch_feature = $this->redis->hgetall("{$this->feature_namespace()}:feature:{$feature_name}");
 
     if(!$dark_launch_feature){
-      $this->_init_features();
+      $this->_set_from_config($feature_name);
       $dark_launch_feature = $this->redis->hgetall("{$this->feature_namespace()}:feature:{$feature_name}");
     }
     return $dark_launch_feature ? $dark_launch_feature : $this->_return_error($feature_name);
@@ -284,20 +284,20 @@ class Dark_Launch
 
 
   /**
-  * Sets initial values for dark launching from config
+  * Check if value exists in config and sets it in redis if it does
+  * @return boolean FALSE
   */
-  protected function _init_features()
+  protected function set_from_config($feature_name)
   {
     $features = $this->config;
     if(isset($features)){
       if(is_array($features)){
-        foreach($features as $key => $value){
-          $this->enable_feature($key, $features[$key]);
+        if(isset($features[$feature_name])){
+          $this->enable_feature($feature_name, $features[$feature_name]);
         }
       }
     }
   }
-
 
   //////////////////////
   ////// PRIVATE ///////

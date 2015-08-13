@@ -110,10 +110,11 @@ class Dark_Launch
   */
   public function feature($feature_name)
   {
+    $feature_name = str_replace('_','-', $feature_name);
     $dark_launch_feature = $this->redis->hgetall("{$this->feature_namespace()}:feature:{$feature_name}");
 
     if(!$dark_launch_feature){
-      $this->set_from_config($feature_name);
+      $this->_set_from_config($feature_name);
       $dark_launch_feature = $this->redis->hgetall("{$this->feature_namespace()}:feature:{$feature_name}");
     }
     return $dark_launch_feature ? $dark_launch_feature : $this->_return_error($feature_name);
@@ -130,6 +131,7 @@ class Dark_Launch
     if(!is_array($feature_values)){
       $feature_values = (array)$feature_values;
     }
+    $feature_name = str_replace('_','-', $feature_name);
     $multi = $this->redis->multi();
     $multi->hmset("{$this->feature_namespace()}:feature:{$feature_name}", $feature_values);
     $multi->sadd("{$this->feature_namespace()}:features", $feature_name);
@@ -143,6 +145,7 @@ class Dark_Launch
   */
   public function disable_feature($feature_name)
   {
+    $feature_name = str_replace('_','-', $feature_name);
     $multi = $this->redis->multi();
     $this->redis->del("{$this->feature_namespace()}:feature:{$feature_name}");
     $this->redis->srem("{$this->feature_namespace()}:features", $feature_name);

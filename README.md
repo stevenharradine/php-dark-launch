@@ -124,6 +124,10 @@ Disables a dark launch feature
 ```php
 $this->dark_launch->disable_feature('my-awesome-feature');
 ```
+
+## Running Tests 
+```vendor/behat/behat/bin/behat```
+
 ## License
 [MIT](https://tldrlegal.com/license/mit-license)
 
@@ -132,6 +136,3 @@ $this->dark_launch->disable_feature('my-awesome-feature');
 * Prashant Kandathil | [email](mailto:prashant@techsamurais.com)
 * Ben Visser | [email](mailto:benjamin.visser@telus.com)
 
-## TODO
-
-- Write some tests with behat!

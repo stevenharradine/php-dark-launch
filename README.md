@@ -127,7 +127,9 @@ $this->dark_launch->disable_feature('my-awesome-feature');
 
 ## Running Tests
 
-`vendor/behat/behat/bin/behat`
+```
+vendor/behat/behat/bin/behat
+```
 
 ## License
 [MIT](https://tldrlegal.com/license/mit-license)

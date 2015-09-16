@@ -4,4 +4,4 @@ php:
 services:
   - redis-server
 script:
-  - ./vendor/behat/behat/bin/behat # run behat
+  - "cd php-dark-launch && ./vendor/behat/behat/bin/behat" # run behat

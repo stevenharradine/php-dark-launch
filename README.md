@@ -125,7 +125,8 @@ Disables a dark launch feature
 $this->dark_launch->disable_feature('my-awesome-feature');
 ```
 
-## Running Tests 
+## Running Tests
+
 `vendor/behat/behat/bin/behat`
 
 ## License

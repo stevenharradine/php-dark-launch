@@ -4,6 +4,7 @@ php:
 services:
   - redis-server
 before_script:
+  - pecl install redis
   - composer install
 script:
   - ./vendor/behat/behat/bin/behat # run behat

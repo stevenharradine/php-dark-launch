@@ -14,7 +14,6 @@ A PHP library to dark launch features
 - [Methods](#methods)
 - [License](#license)
 - [Contributors](#contributors)
-- [TODO](#TODO)
 
 ## Installation
 

@@ -1,0 +1,10 @@
+language: php
+php:
+  - '5.5'
+services:
+  - redis-server
+before_script:
+  - pecl install redis
+  - composer install
+script:
+  - ./vendor/behat/behat/bin/behat # run behat

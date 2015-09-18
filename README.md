@@ -4,6 +4,7 @@
 [![Code Climate](https://codeclimate.com/github/noqcks/php-dark-launch/badges/gpa.svg)](https://codeclimate.com/github/noqcks/php-dark-launch)
 [![Build Status](https://travis-ci.org/noqcks/php-dark-launch.svg?branch=master)](https://travis-ci.org/noqcks/php-dark-launch)
 
+
 A PHP library to dark launch features
 
 [What is dark launching?](http://changelog.ca/log/2012/07/19/dark_launching_software_features)
@@ -15,7 +16,6 @@ A PHP library to dark launch features
 - [Methods](#methods)
 - [License](#license)
 - [Contributors](#contributors)
-- [TODO](#TODO)
 
 ## Installation
 
@@ -50,7 +50,7 @@ $dark_launch = new Dark_Launch($params);
 ```php
 // $redis
 $redis = new Redis();
-$redis->connection('127.0.0.1');
+$redis->connect('127.0.0.1');
 
 
 // $config
@@ -126,6 +126,13 @@ Disables a dark launch feature
 ```php
 $this->dark_launch->disable_feature('my-awesome-feature');
 ```
+
+## Running Tests
+
+```
+vendor/behat/behat/bin/behat
+```
+
 ## License
 [MIT](https://tldrlegal.com/license/mit-license)
 
@@ -134,6 +141,3 @@ $this->dark_launch->disable_feature('my-awesome-feature');
 * Prashant Kandathil | [email](mailto:prashant@techsamurais.com)
 * Ben Visser | [email](mailto:benjamin.visser@telus.com)
 
-## TODO
-
-- Write some tests with behat!

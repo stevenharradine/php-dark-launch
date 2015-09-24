@@ -9,7 +9,6 @@ A PHP library to dark launch features
 
 [What is dark launching?](http://changelog.ca/log/2012/07/19/dark_launching_software_features)
 
-
 ## Table of contents
 
 - [Installation](#installation)

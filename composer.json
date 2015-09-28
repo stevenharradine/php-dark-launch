@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "php": "^5.3.3"
+        "php": "*"
     },
     "require-dev": {
         "behat/behat": "^3.0@dev",

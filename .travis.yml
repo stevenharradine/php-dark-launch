@@ -6,4 +6,4 @@ services:
 before_script:
   - composer install
 script:
-  - ./vendor/behat/behat/bin/behat # run behat
+  - vendor/bin/phpunit --coverage-text

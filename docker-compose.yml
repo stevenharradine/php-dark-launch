@@ -1,0 +1,9 @@
+version: '2'
+services:
+  dark-launch-library:
+    build: .
+    volumes:
+     - .:/home/app/code
+    environment:
+     - USER_NAME=app
+    container_name: dark-launch-library

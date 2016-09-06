@@ -4,6 +4,7 @@ services:
     build: .
     volumes:
      - .:/home/app/code
+     - ~/.ssh:/home/app/.ssh
     environment:
      - USER_NAME=app
     container_name: dark-launch-library

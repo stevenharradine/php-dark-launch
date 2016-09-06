@@ -1,5 +1,5 @@
 <?php
-namespace Telus\Digital\LibrariesTests;
+namespace Telus\Digital\LibrariesTests\DarkLaunch;
 use PHPUnit\Framework\TestCase;
 
 class BaseTest extends TestCase {

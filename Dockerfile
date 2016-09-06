@@ -18,4 +18,10 @@ ENV HOME=/home/app
 
 RUN mkdir /home/app/code
 
+RUN mkdir /home/app/.ssh
+RUN chown -R app:app /home/app/.ssh
+RUN chmod 700 /home/app/.ssh
+RUN echo "Host github.com\n\tStrictHostKeyChecking no\n" >> /home/app/.ssh/config
+
+
 CMD [ "./docker.sh" ]

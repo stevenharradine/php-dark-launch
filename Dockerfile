@@ -6,7 +6,14 @@ RUN apt-get update && \
   pecl install xdebug && docker-php-ext-enable xdebug && \
   pecl install -o -f redis \
   &&  rm -rf /tmp/pear \
-  &&  echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini
+  && curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/2.2.8.tar.gz \
+  && tar xfz /tmp/redis.tar.gz \
+  && rm -r /tmp/redis.tar.gz \
+  && mkdir /usr/src/php \
+  && mkdir /usr/src/php/ext \
+  && mkdir /usr/src/php/redis \
+  && mv phpredis-2.2.8 /usr/src/php/ext/redis \
+  && docker-php-ext-install redis
 
 ADD docker.sh /
 

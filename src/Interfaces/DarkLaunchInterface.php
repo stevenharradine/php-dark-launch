@@ -1,16 +1,16 @@
 <?php
 namespace Telus\Digital\Libraries\DarkLaunch\Interfaces;
 
-use Telus\Digital\LibrariesTests\BaseTest;
-
 interface DarkLaunchInterface {
+
+  public function __construct(\Redis $redisConnection);
 
   /**
   * Determines whether a dark launch feature is active
   * @param $feature string - The name of the feature
   * @return boolean - True if a feature is enabled, false if not
   */
-  public function feature_enabled($feature_name);
+  public function featureEnabled($featureName);
 
   /**
   * Get a list of projects
@@ -42,13 +42,13 @@ interface DarkLaunchInterface {
   * @param $feature_name string - The name of the feature
   * @param $feature_values array - An associative array of the features keys and values
   */
-  public function enable_feature($feature_name, $feature_values);
+  public function enableFeature($feature_name, $feature_values);
 
   /**
   * Disable a dark launch feature
   * @param $feature string - The name of the feature
   */
-  public function disable_feature($feature_name);
+  public function disableFeature($feature_name);
 
   /**
   * Parses a features value
@@ -62,7 +62,7 @@ interface DarkLaunchInterface {
   * @param $feature array - An associative array of the features attributes
   * @return boolean
   */
-  public function parse_boolean($feature);
+  public function parseBoolean($feature);
 
   /**
   * Returns TRUE when the current time is between start and stop time and FALSE otherwise
@@ -70,7 +70,7 @@ interface DarkLaunchInterface {
   * @return boolean TRUE if feature is enabled
   * Exception is thrown when stop time is before end time
   */
-  public function parse_time($feature);
+  public function parseTime($feature);
 
   /**
   * Returns TRUE when the current time is between start and stop time and FALSE otherwise
@@ -78,13 +78,27 @@ interface DarkLaunchInterface {
   * @param $stop int - A unix time of stop time
   * @return boolean TRUE if in between start and stop time
   */
-  public function time_is_valid($start, $stop);
+  public function timeIsValid($start, $stop);
 
   /**
   * Returns TRUE or FALSE for X % of the time
   * @param $feature array - A associative array of the features attributes
   * @return boolean
   */
-  public function parse_percentage($feature);
+  public function parsePercentage($feature);
+
+  /**
+  * Returns integer value of a feature
+  * @param $feature array - A associative array of the features attributes
+  * @return integer
+  */
+  public function parseInt($feature);
+
+  /**
+  * Returns the string value
+  * @param $feature array - An associative array of the features attributes
+  * @return string
+  */
+  public function parseString($feature);
 
 }

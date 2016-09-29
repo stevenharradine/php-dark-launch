@@ -34,9 +34,12 @@ class DarkLaunchConfigAccessor implements DarkLaunchInterface
   
   const DARK_LAUNCH_NAMESPACE = 'dark-launch';
 
-  public function __construct(\Redis $redisConnection)
+  public function __construct(\Redis $redisConnection, $intialConfig=[], $project='global', $user='global')
   {
     $this->redis = $redisConnection;
+    $this->project = $project;
+    $this->user = $user;
+    $this->config = $intialConfig;
   }
 
 
@@ -58,78 +61,90 @@ class DarkLaunchConfigAccessor implements DarkLaunchInterface
 
   public function features() {
     $features_list = $this->redis->smembers("{$this->featureNamespace()}:features");
-    $pipe = $this->redis->multi(Redis::PIPELINE);
+    $pipe = $this->redis->multi(\Redis::PIPELINE);
     foreach($features_list as $feature){
       $pipe->hgetall("{$this->featureNamespace()}:feature:{$feature}");
     }
     $feature_data = $pipe->exec();
 
     $features = [];
-    foreach($features_list as $key => $feature){
-      $features[$feature] = $feature_data[$key];
+    foreach($features_list as $feature){
+      $features[$feature] = $feature_data[$feature];
     }
     return $features;
   }
 
 
-  public function feature($feature_name) {
-    $dark_launch_feature = $this->redis->hgetall("{$this->featureNamespace()}:feature:{$feature_name}");
+  public function feature($featureName) {
+    $dark_launch_feature = $this->redis->hgetall("{$this->featureNamespace()}:feature:{$featureName}");
 
     if(!$dark_launch_feature){
-      $this->set_from_config($feature_name);
-      $dark_launch_feature = $this->redis->hgetall("{$this->featureNamespace()}:feature:{$feature_name}");
+      $this->setFromConfig($featureName);
+      $dark_launch_feature = $this->redis->hgetall("{$this->featureNamespace()}:feature:{$featureName}");
     }
-    return $dark_launch_feature ? $dark_launch_feature : $this->_return_error($feature_name);
+    return $dark_launch_feature ? $dark_launch_feature : $this->returnError($featureName);
   }
 
 
-  public function enableFeature($feature_name, $feature_values) {
-    if(!is_array($feature_values)){
-      $feature_values = (array)$feature_values;
+  public function enableFeature($featureName, $featureValues) {
+    if(!is_array($featureValues)){
+      $featureValues = (array)$featureValues;
     }
     $multi = $this->redis->multi();
-    $multi->hmset("{$this->featureNamespace()}:feature:{$feature_name}", $feature_values);
-    $multi->sadd("{$this->featureNamespace()}:features", $feature_name);
+    $multi->hmset("{$this->featureNamespace()}:feature:{$featureName}", $featureValues);
+    $multi->sadd("{$this->featureNamespace()}:features", $featureName);
     $multi->exec();
   }
 
 
-  public function disableFeature($feature_name) {
+  public function disableFeature($featureName) {
     $multi = $this->redis->multi();
-    $this->redis->del("{$this->featureNamespace()}:feature:{$feature_name}");
-    $this->redis->srem("{$this->featureNamespace()}:features", $feature_name);
+    $this->redis->del("{$this->featureNamespace()}:feature:{$featureName}");
+    $this->redis->srem("{$this->featureNamespace()}:features", $featureName);
     $multi->exec();
   }
 
-  public function parse($feature) {
-    if(is_array($feature)){
-      $type = ucfirst($feature['type']);
-      return $this->{'parse'.$type}($feature);
+  public function parse($featureValue) {
+    if(is_array($featureValue)){
+      $type = $featureValue['type'];
+      
+      $typeParts = explode('_', $type);
+      if(count($typeParts) > 1) {
+        foreach($typeParts as $index => $typePart) {
+          $typeParts[$index] = ucfirst($typePart);
+        }
+        $type = implode('', $typeParts);
+      }
+      else {
+        $type = ucfirst($type);
+      }
+      
+      return $this->{'parse'.$type}($featureValue);
     } else {
       return FALSE;
     }
   }
   
 
-  public function parseBoolean($feature) {
-    if(!isset($feature['value'])){
+  public function parseBoolean($featureValue) {
+    if(!isset($featureValue['value'])){
       throw new Exception('Invalid dark launch config: missing feature value');
     }
-    return filter_var($feature['value'], FILTER_VALIDATE_BOOLEAN);
+    return filter_var($featureValue['value'], FILTER_VALIDATE_BOOLEAN);
   }
 
 
-  public function parseTime($feature) {
-    if(!isset($feature['start']) OR !isset($feature['stop'])){
+  public function parseTime($featureValue) {
+    if(!isset($featureValue['start']) OR !isset($featureValue['stop'])){
       throw new Exception('Invalid dark launch config: missing feature start and stop time');
     }
 
-    if(!is_null($feature['stop']) AND ($feature['stop'] < $feature['start'])){
+    if(!is_null($featureValue['stop']) AND ($featureValue['stop'] < $featureValue['start'])){
       error_log('Invalid value for stop time.', 0);
       return FALSE;
     }
 
-    if($this->timeIsValid($feature['start'], $feature['stop'])){
+    if($this->timeIsValid($featureValue['start'], $featureValue['stop'])){
       return TRUE;
     } else {
       return FALSE;
@@ -148,12 +163,12 @@ class DarkLaunchConfigAccessor implements DarkLaunchInterface
   }
 
 
-  public function parsePercentage($feature) {
-    if(!isset($feature['value'])){
+  public function parsePercentage($featureValue) {
+    if(!isset($featureValue['value'])){
       throw new Exception('Invalid dark launch config: missing feature value.');
     }
 
-    $percentage = $feature['value'];
+    $percentage = $featureValue['value'];
     if($percentage < 0 OR $percentage > 100) {
       error_log('Dark launch percentage is not in the 0 - 100 range.', 0);
       return FALSE;
@@ -163,28 +178,76 @@ class DarkLaunchConfigAccessor implements DarkLaunchInterface
     return $random_number <= $percentage ? TRUE : FALSE;
   }
 
-  public function parseInt($feature) {
-    if(!isset($feature['value'])){
+  public function parseInt($featureValue) {
+    if(!isset($featureValue['value'])){
       throw new Exception('Invalid dark launch config: missing feature value.');
     }
 
-    $value = intval($feature['value']);
+    $value = intval($featureValue['value']);
     return $value;
   }
 
-  /**
-  * Returns the string value
-  * @param $feature array - An associative array of the features attributes
-  * @return string
-  */
-  public function parseString($feature) {
-    if(!isset($feature['value'])){
+
+  public function parseString($featureValue) {
+    if(!isset($featureValue['value'])){
       throw new Exception('Invalid dark launch config: missing feature value.');
     }
 
-    return $feature['value'];
+    return $featureValue['value'];
   }
 
+  public function parseTimeString($featureValue){
+    if(!isset($featureValue['start']) OR !isset($featureValue['stop'])){
+      throw new Exception('Invalid dark launch config: missing feature start and stop time');
+    }
+
+    $result = false;
+
+    if(!is_null($featureValue['stop']) AND ($featureValue['stop'] < $featureValue['start'])){
+      error_log('Invalid value for stop time.', 0);
+      $result = FALSE;
+      return $result;
+    }
+    if($this->timeIsValid($featureValue['start'], $featureValue['stop'])
+      && isset($featureValue['value'])){
+
+      $result = $featureValue['value'];
+    }
+
+    return $result;
+  }
+
+  public function parseTrafficSource($featureValue) {
+    $return = true;
+
+    if(!isset($featureValue['value'])){
+      throw new Exception('Invalid dark launch config: missing feature value');
+    } else {
+      $is_external_header = $_SERVER['is-external'];
+      $is_external = isset($is_external_header) && $is_external_header;
+
+      if ($featureValue['value'] == 'external') {
+        $return = $is_external;
+      } else if ($featureValue['value'] == 'internal') {
+        $return = ! $is_external;
+      }
+    }
+    return $return;
+  }
+
+  public function parseCookie($featureValue) {
+    $cookie_name = &$featureValue['value'];
+    if(!isset($cookie_name)){
+      throw new Exception('Invalid dark launch config: missing feature value');
+    }
+
+    $cookie_value = &$_COOKIE[$cookie_name];
+    if(!isset($cookie_value)) {
+      return false;
+    } else {
+      return filter_var($cookie_value, FILTER_VALIDATE_BOOLEAN);
+    }
+  }
 
   //////////////////////
   ////// PROTECTED /////
@@ -225,16 +288,16 @@ class DarkLaunchConfigAccessor implements DarkLaunchInterface
   * Check if value exists in config and sets it in redis if it does
   * @return boolean FALSE
   */
-  protected function setFromConfig($feature_name)
+  protected function setFromConfig($featureName)
   {
     //add set members for user & project
-    $this->_add_redis_set_members();
+    $this->addRedisSetMembers();
     
     $features = $this->config;
     if(isset($features)){
       if(is_array($features)){
-        if(isset($features[$feature_name])){
-          $this->enable_feature($feature_name, $features[$feature_name]);
+        if(isset($features[$featureName])){
+          $this->enableFeature($featureName, $features[$featureName]);
         }
       }
     }
@@ -249,7 +312,7 @@ class DarkLaunchConfigAccessor implements DarkLaunchInterface
   * Logs and error and returns false
   * @return boolean FALSE
   */
-  private function _return_error($feature)
+  private function returnError($feature)
   {
     error_log("No dark launch value exists for: {$feature}", 0);
     return FALSE;
@@ -259,21 +322,10 @@ class DarkLaunchConfigAccessor implements DarkLaunchInterface
   /**
   * Adds project and user to a sets that can be easily accessed
   */
-  private function _add_redis_set_members()
+  private function addRedisSetMembers()
   {
     $this->redis->sadd($this->projectNamespace().":projects", $this->project);
     $this->redis->sadd($this->userNamespace().":users", $this->user);
   }
 
-
-  /**
-  * Sets private variables
-  * @param $params array - An assocative array to set class variables
-  */
-  private function _set_vars($params)
-  {
-    foreach($params as $key => $value){
-      $this->{$key} = $params[$key];
-    }
-  }
 }

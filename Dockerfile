@@ -29,5 +29,5 @@ RUN mkdir /home/app/.ssh
 RUN chown -R app:app /home/app/.ssh
 RUN chmod 700 /home/app/.ssh
 
-
+USER app
 CMD [ "./docker.sh" ]

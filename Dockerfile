@@ -15,7 +15,7 @@ RUN apt-get update && \
   && mv phpredis-2.2.8 /usr/src/php/ext/redis \
   && docker-php-ext-install redis
 
-ADD docker.sh /
+COPY docker.sh /
 
 RUN chmod 775 /docker.sh
 
@@ -28,7 +28,6 @@ RUN mkdir /home/app/code
 RUN mkdir /home/app/.ssh
 RUN chown -R app:app /home/app/.ssh
 RUN chmod 700 /home/app/.ssh
-RUN echo "Host github.com\n\tStrictHostKeyChecking no\n" >> /home/app/.ssh/config
 
 
 CMD [ "./docker.sh" ]

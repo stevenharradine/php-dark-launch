@@ -233,9 +233,47 @@ class DarkLaunchTest extends BaseTest {
 
   public function testEnableFeatureFunction() {
     $stub = $this->createMock(\Redis::class);
+    $testValue = [
+        'type' => 'string',
+        'value' => 'asdf'
+    ];
     $map = [
-            ['dark-launch:project:commerce:user:pkandathil:features', ['test']]
+            [
+              'dark-launch:project:commerce:user:pkandathil:feature:test'
+              , $testValue
+            ]
           ];
+    $stub->method('multi')
+         ->willReturn($stub);
+    $stub->method('hmset')
+         ->willReturn(null);
+    $stub->method('sadd')
+         ->willReturn(null);
+    $stub->method('exec')
+         ->willReturn(null);
+    $stub->method('hgetall')
+         ->will($this->returnValueMap($map));
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, $initialConfig, 'commerce', 'pkandathil');
+    $darkLaunchLibrary->enableFeature('test', $testValue);
+    $this->assertEquals($testValue, $darkLaunchLibrary->feature('test'));
+  }
+
+  public function testEnableFeatureBadFeatureValue() {
+    $stub = $this->createMock(\Redis::class);
+    $testValue = null;
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, $initialConfig, 'commerce', 'pkandathil');
+    $this->expectException(\Exception::class);
+    $darkLaunchLibrary->enableFeature('test', $testValue);
+  }
+
+  public function testDisableFeature() {
+    $stub = $this->createMock(\Redis::class);
+    $stub->method('multi')
+         ->willReturn($stub);
+    $testValue = null;
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, $initialConfig, 'commerce', 'pkandathil');
+    $darkLaunchLibrary->disableFeature('test', $testValue);
+    $this->assertEquals(False, $darkLaunchLibrary->feature('test'));
   }
 
 }

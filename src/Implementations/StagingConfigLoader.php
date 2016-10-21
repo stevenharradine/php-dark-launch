@@ -7,8 +7,17 @@ class StagingConfigLoader implements ConfigInterface {
 
   public function __construct() {
     $this->settings = [
-      "host" => "data-cache.1jit0g.ng.0001.use1.cache.amazonaws.com",
-      "port" => '6379'
+      "redis" => [
+        "Host" => "data-cache.1jit0g.ng.0001.use1.cache.amazonaws.com",
+        "Port" => '6379'
+      ],
+      "mysql" => [
+        "Host" => ""
+        "Port" => ""
+        "userName" => ""
+        "password" => ""
+        "database" => ""
+      ]
     ];
   }
 

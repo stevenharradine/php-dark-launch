@@ -1,7 +1,7 @@
 <?php 
 namespace Telus\Digital\Libraries\DarkLaunch\Implementations;
 
-use Telus\Digital\Libraries\ConfigLoader\Interfaces\RedisConnectionLoaderInterface;
+use Telus\Digital\Libraries\DarkLaunch\Interfaces\RedisConnectionLoaderInterface;
 
 class RedisConnectionLoader implements RedisConnectionLoaderInterface {
 

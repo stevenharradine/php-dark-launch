@@ -87,6 +87,9 @@ class DarkLaunchConfigAccessor implements DarkLaunchInterface
 
 
   public function enableFeature($featureName, $featureValues) {
+    if(empty($featureValues)) {
+      throw new \Exception('Empty value passed in for featureValues');
+    }
     if(!is_array($featureValues)){
       $featureValues = (array)$featureValues;
     }

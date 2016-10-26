@@ -1,6 +1,6 @@
 FROM php:5.6-cli
 RUN apt-get update && \
-  apt-get install -y wget curl git && \
+  apt-get install -y wget curl sudo git && \
   curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer && \
   apt-get install -y redis-server && \
   pecl install xdebug && docker-php-ext-enable xdebug && \
@@ -20,6 +20,12 @@ COPY docker.sh /
 RUN chmod 775 /docker.sh
 
 RUN useradd --user-group --create-home app
+
+RUN echo "app ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+RUN passwd -d app
+
+RUN adduser app sudo
 
 ENV HOME=/home/app
 

@@ -1,10 +1,10 @@
 <?php
 namespace Telus\Digital\LibrariesTests\DarkLaunch;
 
-use Telus\Digital\Libraries\DarkLaunch\Implementations\RedisConnectionLoader;
+use Telus\Digital\Libraries\DarkLaunch\Implementations\DatabaseConnectionLoader;
 use Telus\Digital\Libraries\DarkLaunch\Implementations\ApplicationConfig;
 
-class RedisConnectionLoaderTest extends BaseTest {
+class DatabaseonnectionLoaderTest extends BaseTest {
 
   public function testContructInstance() {
     $applicationConfig = new ApplicationConfig();
@@ -13,7 +13,7 @@ class RedisConnectionLoaderTest extends BaseTest {
     $redisHost = $developmentConfig['redis']['host'];
     $redisPort = $developmentConfig['redis']['port'];
 
-    $redisConnection = RedisConnectionLoader::getRedisConnection($redisHost, $redisPort);
+    $redisConnection = DatabaseConnectionLoader::getRedisConnection($redisHost, $redisPort);
     $this->assertNotEmpty($redisConnection);
     $this->assertEquals($redisConnection->ping(), '+PONG');
   }

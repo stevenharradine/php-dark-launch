@@ -3,7 +3,7 @@ namespace Telus\Digital\Libraries\DarkLaunch\Implementations;
 
 use Telus\Digital\Libraries\DarkLaunch\Interfaces\RedisConnectionLoaderInterface;
 
-class RedisConnectionLoader implements RedisConnectionLoaderInterface {
+class DatabaseConnectionLoader implements RedisConnectionLoaderInterface {
 
   private function __construct(){}
 

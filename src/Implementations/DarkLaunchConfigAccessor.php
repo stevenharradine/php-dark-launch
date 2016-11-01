@@ -32,6 +32,12 @@ class DarkLaunchConfigAccessor implements DarkLaunchInterface
   protected $mysql;
 
   /**
+   * Name of mysql table
+   * @var String
+   */
+  protected $mysql_table = 'keys_to_values';
+
+  /**
   * @var array
   * Default values for dark launching
   * e.g ["feature_1" => ["type" => "boolean", "value" => TRUE],
@@ -41,7 +47,7 @@ class DarkLaunchConfigAccessor implements DarkLaunchInterface
   
   const DARK_LAUNCH_NAMESPACE = 'dark-launch';
 
-  public function __construct(\Redis $redisConnection, Capsule $mysqlConnection, $intialConfig=[], $project='global', $user='global')
+  public function __construct(\Redis $redisConnection, Capsule $mysqlConnection=null, $intialConfig=[], $project='global', $user='global')
   {
     $this->redis = $redisConnection;
     $this->mysql = $mysqlConnection;
@@ -101,10 +107,18 @@ class DarkLaunchConfigAccessor implements DarkLaunchInterface
     if(!is_array($featureValues)){
       $featureValues = (array)$featureValues;
     }
+    $key = "{$this->featureNamespace()}:feature:{$featureName}";
     $multi = $this->redis->multi();
-    $multi->hmset("{$this->featureNamespace()}:feature:{$featureName}", $featureValues);
+    $multi->hmset($key, $featureValues);
     $multi->sadd("{$this->featureNamespace()}:features", $featureName);
     $multi->exec();
+
+    if(!is_null($this->mysqlConnection)) {
+      $this->mysqlConnection->table($this->mysqlTableName)->insert([
+        "key" => $key,
+        "value" => $value
+      ]);
+    }
   }
 
 

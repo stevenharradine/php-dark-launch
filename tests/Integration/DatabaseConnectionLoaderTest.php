@@ -8,11 +8,6 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 
 class DatabaseonnectionLoaderTest extends BaseTest {
 
-  protected function setUp()
-    {
-        $this->stack = [];
-    }
-
   public function testContructRedisInstance() {
     $applicationConfig = new ApplicationConfig();
     $developmentConfig = $applicationConfig->getValue("local-development");

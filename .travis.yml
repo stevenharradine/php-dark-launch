@@ -6,7 +6,5 @@ services:
   - mysql
 before_script:
   - composer install
-  - mysql -e 'create database dark_launch;'
-  - vendor/bin/phinx migrate -c config-phinx-travis-ci.php
 script:
   - vendor/bin/phpunit --coverage-text

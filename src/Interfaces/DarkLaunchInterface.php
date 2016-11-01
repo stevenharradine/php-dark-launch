@@ -1,5 +1,6 @@
 <?php
 namespace Telus\Digital\Libraries\DarkLaunch\Interfaces;
+use Illuminate\Database\Capsule\Manager as Capsule;
 
 interface DarkLaunchInterface {
 
@@ -11,7 +12,7 @@ interface DarkLaunchInterface {
    * @param String $user The user that is usig the DL library. This will used to build the namespace under which the keys are stored. Since many users might be sharing a dev env, we need this separation. 
    * @return
    */
-  public function __construct(\Redis $redisConnection, $initialConfig=[], $project='global', $user='global');
+  public function __construct(\Redis $redisConnection, Capsule $mysqlConnection, $initialConfig=[], $project='global', $user='global');
 
   /**
   * Determines whether a dark launch feature is active

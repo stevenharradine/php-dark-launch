@@ -7,17 +7,31 @@ class ApplicationConfig implements ConfigInterface {
 
   public function __construct() {
     $this->settings = [
-      "development" => [
+      "local-development" => [
         "redis" => [
           "host" => "localhost",
           "port" => '6379'
         ],
         "mysql" => [
-          "host" => "",
-          "port" => "",
-          "userName" => "",
-          "password" => "",
-          "database" => "",
+          "host" => "localhost",
+          "port" => "3306",
+          "userName" => "root",
+          "password" => "root",
+          "database" => "dark_launch",
+          "unix_socket" => "/var/run/mysqld/mysqld.sock"
+        ]
+      ],
+      "integrated-development" => [
+        "redis" => [
+          "host" => "localhost",
+          "port" => '6379'
+        ],
+        "mysql" => [
+          "host" => "telus-commerce-orders.cluster-chswslsbflqt.us-west-2.rds.amazonaws.com",
+          "port" => "3306",
+          "userName" => "commerce",
+          "password" => "notwebchannel",
+          "database" => "dark_launch"
         ]
       ],
       "staging" => [
@@ -26,24 +40,24 @@ class ApplicationConfig implements ConfigInterface {
           "port" => '6379'
         ],
         "mysql" => [
-          "host" => "",
-          "port" => "",
-          "userName" => "",
-          "password" => "",
-          "database" => "",
+          "host" => "homesolutions-orders.chswslsbflqt.us-west-2.rds.amazonaws.com",
+          "port" => "3306",
+          "userName" => "commerce",
+          "password" => "notwebchannel",
+          "database" => "dark_launch"
         ]
       ],
       "production" => [
         "redis" => [
-          "host" => "data-cache.1jit0g.ng.0001.use1.cache.amazonaws.com",
+          "host" => "homesolutions-orders.chswslsbflqt.us-west-2.rds.amazonaws.com",
           "port" => '6379'
         ],
         "mysql" => [
-          "host" => "",
-          "port" => "",
-          "userName" => "",
-          "password" => "",
-          "database" => "",
+          "host" => "homesolutions-orders.c8ukeyti5zy6.us-east-1.rds.amazonaws.com",
+          "port" => "3306",
+          "userName" => "commerce",
+          "password" => "notwebchannel",
+          "database" => "dark_launch"
         ]
       ]
     ];

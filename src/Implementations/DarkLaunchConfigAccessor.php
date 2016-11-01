@@ -2,6 +2,7 @@
 namespace Telus\Digital\Libraries\DarkLaunch\Implementations;
 
 use Telus\Digital\Libraries\DarkLaunch\Interfaces\DarkLaunchInterface;
+use Illuminate\Database\Capsule\Manager as Capsule;
 
 class DarkLaunchConfigAccessor implements DarkLaunchInterface
 {
@@ -25,6 +26,12 @@ class DarkLaunchConfigAccessor implements DarkLaunchInterface
   protected $redis;
 
   /**
+  * @var Mysql connection
+  * The mysql connection we shall use
+  */
+  protected $mysql;
+
+  /**
   * @var array
   * Default values for dark launching
   * e.g ["feature_1" => ["type" => "boolean", "value" => TRUE],
@@ -34,9 +41,10 @@ class DarkLaunchConfigAccessor implements DarkLaunchInterface
   
   const DARK_LAUNCH_NAMESPACE = 'dark-launch';
 
-  public function __construct(\Redis $redisConnection, $intialConfig=[], $project='global', $user='global')
+  public function __construct(\Redis $redisConnection, Capsule $mysqlConnection, $intialConfig=[], $project='global', $user='global')
   {
     $this->redis = $redisConnection;
+    $this->mysql = $mysqlConnection;
     $this->project = $project;
     $this->user = $user;
     $this->config = $intialConfig;
@@ -297,12 +305,10 @@ class DarkLaunchConfigAccessor implements DarkLaunchInterface
     $this->addRedisSetMembers();
     
     $features = $this->config;
-    if(isset($features)){
-      if(is_array($features)){
-        if(isset($features[$featureName])){
-          $this->enableFeature($featureName, $features[$featureName]);
-        }
-      }
+    if(isset($features) 
+    && is_array($features) 
+    && isset($features[$featureName])){
+      $this->enableFeature($featureName, $features[$featureName]);
     }
   }
 

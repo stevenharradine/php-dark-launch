@@ -1,5 +1,5 @@
 <?php
-namespace Telus\Digital\LibrariesTests\DarkLaunch;
+namespace Telus\Digital\LibrariesTests\DarkLaunch\Unit;
 
 use Telus\Digital\LibrariesTests\DarkLaunch\BaseTest;
 use Telus\Digital\Libraries\DarkLaunch\Implementations\DarkLaunchConfigAccessor;
@@ -7,11 +7,12 @@ use Telus\Digital\Libraries\ConfigLoader\Implementations\ConfigLoaderFactory;
 use Telus\Digital\Libraries\ConfigLoader\Interfaces\ConfigInterface;
 use Telus\Digital\Libraries\DarkLaunch\Implementations\StagingConfigLoader;
 use Telus\Digital\Libraries\DarkLaunch\Implementations\RedisConnectionLoader;
+use Illuminate\Database\Capsule\Manager as Capsule;
 
 class DarkLaunchTest extends BaseTest {
 
   public function testContructInstance() {
-    $darkLaunchLibrary = new DarkLaunchConfigAccessor(new \Redis());
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor(new \Redis(), new Capsule);
   }
 
   /**
@@ -24,7 +25,7 @@ class DarkLaunchTest extends BaseTest {
 
     $this->assertEquals($darkLaunchValue, $stub->hgetall());
     
-    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub);
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, new Capsule);
     $result = $darkLaunchLibrary->featureEnabled('test');
     $this->assertEquals($expectedResult, $result);
   }
@@ -119,7 +120,7 @@ class DarkLaunchTest extends BaseTest {
 
     $_SERVER['is-external'] = true;
     $this->assertEquals($darkLaunchValue, $stub->hgetall());
-    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub);
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, new Capsule);
     $result = $darkLaunchLibrary->featureEnabled('test');
     $this->assertEquals($expectedResult, $result);
 
@@ -144,7 +145,7 @@ class DarkLaunchTest extends BaseTest {
          ->willReturn($darkLaunchValue);
     $_SERVER['is-external'] = true;
     $this->assertEquals($darkLaunchValue, $stub->hgetall());
-    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub);
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, new Capsule);
     $result = $darkLaunchLibrary->featureEnabled('test');
     $this->assertEquals($expectedResult, $result);
   }
@@ -160,7 +161,7 @@ class DarkLaunchTest extends BaseTest {
          ->willReturn($darkLaunchValue);
 
     $_COOKIE['cookieName'] = 'true';
-    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub);
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, new Capsule);
     $result = $darkLaunchLibrary->featureEnabled('test');
     $this->assertEquals($expectedResult, $result);
 
@@ -185,7 +186,7 @@ class DarkLaunchTest extends BaseTest {
     $stub->method('multi')
          ->willReturn($stub);
 
-    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, $initialConfig);
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, new Capsule, $initialConfig);
     $result = $darkLaunchLibrary->featureEnabled('test');
     $expectedResult = 'asdf';
     $this->assertEquals($expectedResult, $result);
@@ -195,7 +196,7 @@ class DarkLaunchTest extends BaseTest {
     $stub = $this->createMock(\Redis::class);
     $stub->method('smembers')
          ->willReturn(['commerce']);
-    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, $initialConfig, 'commerce');
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, new Capsule, $initialConfig, 'commerce');
     $this->assertEquals(['commerce'], $darkLaunchLibrary->projects());
   }
 
@@ -203,7 +204,7 @@ class DarkLaunchTest extends BaseTest {
     $stub = $this->createMock(\Redis::class);
     $stub->method('smembers')
          ->willReturn(['pkandathil']);
-    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, $initialConfig, 'commerce', 'pkandathil');
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, new Capsule, $initialConfig, 'commerce', 'pkandathil');
     $this->assertEquals(['pkandathil'], $darkLaunchLibrary->users());
   }
 
@@ -227,7 +228,7 @@ class DarkLaunchTest extends BaseTest {
     $stub->method('exec')
          ->willReturn($initialConfig);
 
-    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, $initialConfig, 'commerce', 'pkandathil');
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, new Capsule, $initialConfig, 'commerce', 'pkandathil');
     $this->assertEquals($initialConfig, $darkLaunchLibrary->features());
   }
 
@@ -253,7 +254,7 @@ class DarkLaunchTest extends BaseTest {
          ->willReturn(null);
     $stub->method('hgetall')
          ->will($this->returnValueMap($map));
-    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, $initialConfig, 'commerce', 'pkandathil');
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, new Capsule, $initialConfig, 'commerce', 'pkandathil');
     $darkLaunchLibrary->enableFeature('test', $testValue);
     $this->assertEquals($testValue, $darkLaunchLibrary->feature('test'));
   }
@@ -261,7 +262,7 @@ class DarkLaunchTest extends BaseTest {
   public function testEnableFeatureBadFeatureValue() {
     $stub = $this->createMock(\Redis::class);
     $testValue = null;
-    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, $initialConfig, 'commerce', 'pkandathil');
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, new Capsule, $initialConfig, 'commerce', 'pkandathil');
     $this->expectException(\Exception::class);
     $darkLaunchLibrary->enableFeature('test', $testValue);
   }
@@ -271,7 +272,7 @@ class DarkLaunchTest extends BaseTest {
     $stub->method('multi')
          ->willReturn($stub);
     $testValue = null;
-    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, $initialConfig, 'commerce', 'pkandathil');
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, new Capsule, $initialConfig, 'commerce', 'pkandathil');
     $darkLaunchLibrary->disableFeature('test', $testValue);
     $this->assertEquals(False, $darkLaunchLibrary->feature('test'));
   }

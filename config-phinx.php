@@ -17,6 +17,7 @@ return [
       "unix_socket" => "/var/run/mysqld/mysqld.sock"
     ],
     'integrated-development' => [
+      'adapter' => 'mysql',
       "host" => "telus-commerce-orders.cluster-chswslsbflqt.us-west-2.rds.amazonaws.com",
       "port" => "3306",
       "user" => "commerce",
@@ -24,6 +25,7 @@ return [
       "name" => "dark_launch"
     ],
     'staging' => [
+      'adapter' => 'mysql',
       "host" => "homesolutions-orders.chswslsbflqt.us-west-2.rds.amazonaws.com",
       "port" => "3306",
       "user" => "commerce",
@@ -31,6 +33,7 @@ return [
       "name" => "dark_launch"
     ],
     'production' => [
+      'adapter' => 'mysql',
       "host" => "homesolutions-orders.c8ukeyti5zy6.us-east-1.rds.amazonaws.com",
       "port" => "3306",
       "user" => "commerce",

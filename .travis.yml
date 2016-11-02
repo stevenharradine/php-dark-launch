@@ -22,3 +22,4 @@ before_script:
   - vendor/bin/phinx migrate -c config-phinx-travis-ci.php
 script:
   - vendor/bin/phpunit --coverage-text
+

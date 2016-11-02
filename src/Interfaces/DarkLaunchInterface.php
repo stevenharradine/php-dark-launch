@@ -125,7 +125,8 @@ interface DarkLaunchInterface {
   public function parseTrafficSource($featureValue);
 
   /**
-   * Returns TRUE or FALSE based on a browser cookie value
+   * Returns TRUE if a cookie with the specified name set
+   * and FALSE if the cookie with specified name is not set
    * @param $feature array - An associative array of the features attributes
    * @return boolean
    */

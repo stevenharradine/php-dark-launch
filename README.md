@@ -76,4 +76,3 @@ $ cd ~/home/app/code
 $ vendor/bin/phinx migrate -c config-phinx.php
 $ vendor/bin/phpunit
 ```
-

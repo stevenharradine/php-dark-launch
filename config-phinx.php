@@ -18,10 +18,10 @@ return [
     ],
     'integrated-development' => [
       'adapter' => 'mysql',
-      "host" => "telus-commerce-orders.cluster-chswslsbflqt.us-west-2.rds.amazonaws.com",
+      "host" => "localhost",
       "port" => "3306",
-      "user" => "commerce",
-      "pass" => "notwebchannel",
+      "user" => "root",
+      "pass" => "",
       "name" => "dark_launch"
     ],
     'staging' => [

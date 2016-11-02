@@ -27,10 +27,10 @@ class ApplicationConfig implements ConfigInterface {
           "port" => '6379'
         ],
         "mysql" => [
-          "host" => "telus-commerce-orders.cluster-chswslsbflqt.us-west-2.rds.amazonaws.com",
+          "host" => "localhost",
           "port" => "3306",
-          "userName" => "commerce",
-          "password" => "notwebchannel",
+          "userName" => "root",
+          "password" => "",
           "database" => "dark_launch"
         ]
       ],

@@ -1,10 +1,25 @@
+
 language: php
-php:
-  - '5.5'
+dist: trusty
+sudo: required
+addons:
+  apt:
+    packages:
+    - mysql-server-5.6
+    - mysql-client-core-5.6
+    - mysql-client-5.6
+    - php5
+    - php5-redis
+    - php5-gd 
+    - php5-mysql
+php: 
+  - '5.6'
 services:
   - redis-server
 before_script:
-  - pecl install redis
   - composer install
+  - mysql -e 'create database dark_launch;'
+  - vendor/bin/phinx migrate -c config-phinx-travis-ci.php
 script:
-  - ./vendor/behat/behat/bin/behat # run behat
+  - vendor/bin/phpunit --coverage-text
+

@@ -1,0 +1,41 @@
+<?php
+return [
+  'paths' => [
+    'migrations' => 'migrations'
+  ],
+  'migration_base_class' => '\Telus\Digital\Libraries\DarkLaunch\Implementations\Migration',
+  'environments' => [
+    'default_migration_table' => 'phinxlog',
+    'default_database' => 'local-development',
+    'local-development' => [
+      'adapter' => 'mysql',
+      'host' => "localhost",
+      'name' => "dark_launch",
+      'user' => "root",
+      'pass' => "root",
+      'port' => "3306",
+      "unix_socket" => "/var/run/mysqld/mysqld.sock"
+    ],
+    'integrated-development' => [
+      "host" => "telus-commerce-orders.cluster-chswslsbflqt.us-west-2.rds.amazonaws.com",
+      "port" => "3306",
+      "user" => "commerce",
+      "pass" => "notwebchannel",
+      "name" => "dark_launch"
+    ],
+    'staging' => [
+      "host" => "homesolutions-orders.chswslsbflqt.us-west-2.rds.amazonaws.com",
+      "port" => "3306",
+      "user" => "commerce",
+      "pass" => "notwebchannel",
+      "name" => "dark_launch"
+    ],
+    'production' => [
+      "host" => "homesolutions-orders.c8ukeyti5zy6.us-east-1.rds.amazonaws.com",
+      "port" => "3306",
+      "user" => "commerce",
+      "pass" => "notwebchannel",
+      "name" => "dark_launch"
+    ]
+  ]
+];

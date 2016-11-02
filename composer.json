@@ -1,34 +1,39 @@
 {
-    "name": "telusdigital/darklaunch",
+    "name": "telus/darklaunch",
     "type": "library",
     "description": "Dark Launching for PHP",
     "homepage": "https://github.com/telusdigital/php-dark-launch",
     "license": "MIT",
-    "authors": [
+    "repositories": [
         {
-            "name": "Ben Visser",
-            "email": "benjamin.visser@telus.com"
-        },  
+          "type": "git",
+          "url": "git@github.com:telusdigital/config-loader"
+        }
+    ],
+    "authors": [ 
         {
             "name": "Prashant Kandathil",
             "email": "prashant@techsamurais.com"
         }
     ],
     "require": {
-        "php": "^5.3.3"
+        "telus/config-loader": "^1.0.3",
+        "illuminate/database": "5.3.*",
+        "illuminate/filesystem": "5.3.*",
+        "robmorgan/phinx": "^0.6.5"
     },
     "require-dev": {
-        "behat/behat": "^3.0@dev",
-        "phpunit/phpunit": "4.7.*"
+        "phpunit/phpunit": "5.4.*"
     },
-    "config": {
-        "bin-dir": "bin/"
-    },
-   "autoload": {
-        "classmap": [
-            "src/"
-        ]
-    },
-    "include-path": ["src/"],
+    "autoload": {
+        "psr-4": {
+          "Telus\\Digital\\Libraries\\DarkLaunch\\": "src/"
+        }
+      },
+      "autoload-dev": {
+        "psr-4": {
+          "Telus\\Digital\\LibrariesTests\\DarkLaunch\\": "tests/"
+        }
+      },
     "minimum-stability": "dev"
 }

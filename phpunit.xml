@@ -1,0 +1,12 @@
+<phpunit bootstrap="src/autoload.php">
+  <testsuites>
+    <testsuite name="php-dark-launch">
+      <directory>tests</directory>
+    </testsuite>
+  </testsuites>
+  <filter>
+    <whitelist processUncoveredFilesFromWhitelist="true">
+      <directory suffix=".php">src/Implementations</directory>
+    </whitelist>
+  </filter>
+</phpunit>

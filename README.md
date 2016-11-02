@@ -11,17 +11,16 @@ A PHP library to dark launch features
 
 - [Installation](#installation)
 - [Usage](#usage)
-- [Methods](#methods)
-- [License](#license)
-- [Contributors](#contributors)
+- [Running Tests](#running-tests)
+- [Deployment](#deployment)
 
-## Installation
+## <a href="installation"></a>Installation
 
 ```
 composer require telusdigital/darklaunch
 ```
 
-## Usage
+## <a href="usage"></a> Usage
 - [Tunables](#tunables)
 - [Config](#config)
 
@@ -50,16 +49,17 @@ $database = $developmentConfig['mysql']['database'];
 
 $mysqlConnection = $this->getMySqlConnection();
 
+//Check interface agreement for constructor
 $darkLaunchLibrary = new DarkLaunchConfigAccessor($redisConnection, $mysqlConnection);
 ```
 
-### Tunables
+### <a href="tunables"></a> Tunables
 
 The list of environments supported but they can overwritten by the user
 `Telus\Digital\Libraries\DarkLaunch\Implementations\ApplicationConfig`
 
 
-### Config
+### <a href="config"></a> Config
 
 Dark Launch defaults can be one of three types
 
@@ -122,7 +122,7 @@ Returns TRUE if a cookie with the specified name set and FALSE if the cookie wit
 ['type' => 'cookie', 'value' => 'name-of-cookie'];
 ```
 
-## Running Tests
+## <a href="running-tests"></a> Running Tests
 
 Log into the docker container
 
@@ -130,4 +130,13 @@ Log into the docker container
 $ cd ~/home/app/code
 $ vendor/bin/phinx migrate -c config-phinx.php
 $ vendor/bin/phpunit
+```
+
+## <a href="deployment"></a> Deployment
+
+* You will need first create the `dark_launch` database in the environment 
+* make sure the user specified in `Telus\Digital\Libraries\DarkLaunch\Implementations\ApplicationConfig.php` and `config-phinx.php` has write access to that database. 
+* Run the migration, replace <environment-name> with values that can be found in config-phinx.php
+```
+$ vendor/bin/phinx migrate -c  vendor/telus/darklaunch/config-phinx.php -e <environment-name>
 ```

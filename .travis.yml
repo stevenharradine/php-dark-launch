@@ -16,6 +16,7 @@ php:
   - '5.6'
 services:
   - redis-server
+  - mysql
 before_script:
   - composer install
   - mysql -e 'create database dark_launch;'

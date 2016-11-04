@@ -18,8 +18,8 @@
     ],
     "require": {
         "telus/config-loader": "^1.0.3",
-        "illuminate/database": "^5.2",
-        "illuminate/filesystem": "^5.2",
+        "illuminate/database": "5.3.*",
+        "illuminate/filesystem": "5.3.*",
         "robmorgan/phinx": "^0.6.5"
     },
     "require-dev": {

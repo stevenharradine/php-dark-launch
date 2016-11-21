@@ -35,7 +35,7 @@ class DarkLaunchConfigAccessor implements DarkLaunchInterface
    * Name of mysql table
    * @var String
    */
-  protected $mysql_table = 'keys_to_values';
+  protected $mysqlTableName = 'keys_to_values';
 
   /**
   * @var array
@@ -113,10 +113,10 @@ class DarkLaunchConfigAccessor implements DarkLaunchInterface
     $multi->sadd("{$this->featureNamespace()}:features", $featureName);
     $multi->exec();
 
-    if(!is_null($this->mysqlConnection)) {
-      $this->mysqlConnection->table($this->mysqlTableName)->insert([
+    if(!is_null($this->mysql)) {
+      $this->mysql->table($this->mysqlTableName)->insert([
         "key" => $key,
-        "value" => $value
+        "value" => json_encode($featureValues)
       ]);
     }
   }

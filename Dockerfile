@@ -9,7 +9,7 @@ RUN echo "mysql-server mysql-server/root_password password root" | debconf-set-s
 RUN echo "mysql-server mysql-server/root_password_again password root" | debconf-set-selections
 
 RUN apt-get update && \
-  apt-get install -yq mysql-server-${MYSQL_VERSION} pwgen && \
+  apt-get install -yq mysql-server-${MYSQL_VERSION} pwgen zip unzip && \
   apt-get install -yf mysql-client-${MYSQL_VERSION} wget curl sudo git && \
   curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer && \
   apt-get install -y redis-server && \

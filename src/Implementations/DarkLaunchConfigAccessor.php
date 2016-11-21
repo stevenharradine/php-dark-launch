@@ -114,10 +114,16 @@ class DarkLaunchConfigAccessor implements DarkLaunchInterface
     $multi->exec();
 
     if(!is_null($this->mysql)) {
-      $this->mysql->table($this->mysqlTableName)->insert([
-        "key" => $key,
-        "value" => json_encode($featureValues)
-      ]);
+      $value = $this->mysql->table($this->mysqlTableName)->where(["key" => $key])->first();
+      if(is_null($value)) {
+        $this->mysql->table($this->mysqlTableName)->insert([
+          "key" => $key,
+          "value" => json_encode($featureValues)
+        ]);
+      }
+      else{
+        $this->mysql->table($this->mysqlTableName)->where(["key" => $key])->update(["value" => json_encode($featureValues)]);
+      }
     }
   }
 

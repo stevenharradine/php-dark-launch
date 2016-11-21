@@ -81,6 +81,21 @@ class DarkLaunchIntegrationTest extends BaseTest {
     $this->assertEquals($testValue, $darkLaunchLibrary->feature('test'));
   }
 
+  public function testEnableFeatureFunctionDuplicate() {
+    $testValue = [
+        'type' => 'string',
+        'value' => 'asdf'
+    ];
+    $testValue2 = [
+        'type' => 'string',
+        'value' => 'asdf2'
+    ];
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($this->redisConnection, $this->mysqlConnection, $initialConfig, 'commerce', 'pkandathil');
+    $darkLaunchLibrary->enableFeature('test', $testValue);
+    $darkLaunchLibrary->enableFeature('test', $testValue2);
+    $this->assertEquals($testValue2, $darkLaunchLibrary->feature('test'));
+  }
+
   public function testEnableFeatureBadFeatureValue() {
     $testValue = null;
     $darkLaunchLibrary = new DarkLaunchConfigAccessor($this->redisConnection, $this->mysqlConnection, $initialConfig, 'commerce', 'pkandathil');

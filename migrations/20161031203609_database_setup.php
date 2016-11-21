@@ -28,7 +28,7 @@ class DatabaseSetup extends Migration
   public function change()
   {
     $table = $this->table('keys_to_values');
-    $table->addColumn('key', 'string', 40000)
+    $table->addColumn('key', 'string')
           ->addColumn('value', 'text')
           ->addColumn('created_at', 'timestamp', array('default' => 'CURRENT_TIMESTAMP'))
           ->addColumn('updated_at', 'timestamp')

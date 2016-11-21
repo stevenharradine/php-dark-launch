@@ -136,7 +136,7 @@ $ vendor/bin/phpunit
 
 * You will need first create the `dark_launch` database in the environment 
 * make sure the user specified in `Telus\Digital\Libraries\DarkLaunch\Implementations\ApplicationConfig.php` and `config-phinx.php` has write access to that database. 
-* Go do your projects base directory and run this command
+* Go to `/vendor/telus/darklaunch`
 * Run the migration, replace <environment-name> with values that can be found in config-phinx.php
 ```
 $ ../../robmorgan/phinx/bin/phinx migrate -c config-phinx.php -e <environment-name>

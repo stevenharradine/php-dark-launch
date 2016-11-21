@@ -127,6 +127,12 @@ class DarkLaunchConfigAccessor implements DarkLaunchInterface
     $this->redis->del("{$this->featureNamespace()}:feature:{$featureName}");
     $this->redis->srem("{$this->featureNamespace()}:features", $featureName);
     $multi->exec();
+
+    if(!is_null($this->mysql)) {
+      $this->mysql->table($this->mysqlTableName)->where([
+        "key" => $key
+      ])->delete();
+    }
   }
 
   public function parse($featureValue) {

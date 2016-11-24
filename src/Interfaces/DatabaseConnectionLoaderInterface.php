@@ -18,7 +18,8 @@ interface DatabaseConnectionLoaderInterface {
    * @param string $database The mysql database
    * @param string $username The mysql username
    * @param string $password The mysql password
+   * @param string $pathToUnixSocket The path to the unix socket "/var/run/mysqld/mysqld.sock"
    * @return
    */
-  public static function getMySqlConnection($host, $port, $database, $username, $password);
+  public static function getMySqlConnection($host, $port, $database, $username, $password, $pathToUnixSocket=false);
 }

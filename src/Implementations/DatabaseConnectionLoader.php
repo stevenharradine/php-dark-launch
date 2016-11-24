@@ -20,9 +20,9 @@ class DatabaseConnectionLoader implements DatabaseConnectionLoaderInterface {
     return $redis;
   }
 
-  public static function getMySqlConnection($host, $port, $database, $username, $password) {
+  public static function getMySqlConnection($host, $port, $database, $username, $password, $pathToUnixSocket=false) {
     $capsule = new Capsule;
-    $capsule->addConnection([
+    $config = [
       'driver'    => 'mysql',
       'host'      => $host,
       'port'      => $port,
@@ -32,8 +32,12 @@ class DatabaseConnectionLoader implements DatabaseConnectionLoaderInterface {
       'charset'   => 'utf8',
       'collation' => 'utf8_unicode_ci',
       'prefix'    => '',
-      "unix_socket" => "/var/run/mysqld/mysqld.sock"
-    ], 'default');
+    ];
+
+    if(!empty($pathToUnixSocket)) {
+      $config["unix_socket"] = $pathToUnixSocket;
+    }
+    $capsule->addConnection($config, 'default');
 
     $capsule->setAsGlobal();
     $capsule->bootEloquent();

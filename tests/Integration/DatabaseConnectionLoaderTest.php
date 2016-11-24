@@ -29,8 +29,9 @@ class DatabaseonnectionLoaderTest extends BaseTest {
     $username = $developmentConfig['mysql']['userName'];
     $password = $developmentConfig['mysql']['password'];
     $database = $developmentConfig['mysql']['database'];
+    $pathToUnixSocker = $developmentConfig['mysql']['unix_socket'];
 
-    $mysqlConnection = DatabaseConnectionLoader::getMySqlConnection($host, $port, $database, $username, $password);
+    $mysqlConnection = DatabaseConnectionLoader::getMySqlConnection($host, $port, $database, $username, $password, $pathToUnixSocker);
     $result = $mysqlConnection->table('keys_to_values')->count();
     $this->assertGreaterThanOrEqual(0, $result, 'Zero or more values in table');
   }

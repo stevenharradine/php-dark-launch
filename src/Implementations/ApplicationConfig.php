@@ -31,7 +31,8 @@ class ApplicationConfig implements ConfigInterface {
           "port" => "3306",
           "userName" => "root",
           "password" => "",
-          "database" => "dark_launch"
+          "database" => "dark_launch",
+          "unix_socket" => "/var/run/mysqld/mysqld.sock"
         ]
       ],
       "staging" => [
@@ -44,7 +45,8 @@ class ApplicationConfig implements ConfigInterface {
           "port" => "3306",
           "userName" => "commerce",
           "password" => "notwebchannel",
-          "database" => "dark_launch"
+          "database" => "dark_launch",
+          "unix_socket" => false
         ]
       ],
       "production" => [
@@ -57,7 +59,8 @@ class ApplicationConfig implements ConfigInterface {
           "port" => "3306",
           "userName" => "commerce",
           "password" => "notwebchannel",
-          "database" => "dark_launch"
+          "database" => "dark_launch",
+          "unix_socket" => false
         ]
       ]
     ];

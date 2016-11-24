@@ -28,8 +28,9 @@ class DarkLaunchIntegrationTest extends BaseTest {
     $username = $developmentConfig['mysql']['userName'];
     $password = $developmentConfig['mysql']['password'];
     $database = $developmentConfig['mysql']['database'];
+    $pathToUnixSocker = $developmentConfig['mysql']['unix_socket'];
 
-    $mysqlConnection = DatabaseConnectionLoader::getMySqlConnection($host, $port, $database, $username, $password);
+    $mysqlConnection = DatabaseConnectionLoader::getMySqlConnection($host, $port, $database, $username, $password, $pathToUnixSocker);
     return $mysqlConnection;
   }
 

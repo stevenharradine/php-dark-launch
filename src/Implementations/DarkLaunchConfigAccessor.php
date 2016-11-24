@@ -108,11 +108,43 @@ class DarkLaunchConfigAccessor implements DarkLaunchInterface
       $featureValues = (array)$featureValues;
     }
     $key = "{$this->featureNamespace()}:feature:{$featureName}";
+    $this->addFeatureToCache($key, $featureName, $featureValues);
+    $this->addFeatureToPersistence($key, $featureValues);
+    
+  }
+
+  public function enableFeatureRaw($featureNameWithProjectAndUser, $featureValues) {
+    if(empty($featureValues)) {
+      throw new \Exception('Empty value passed in for featureValues');
+    }
+    if(!is_array($featureValues)){
+      $featureValues = (array)$featureValues;
+    }
+    $this->addFeatureToCache($featureNameWithProjectAndUser, $featureNameWithProjectAndUser, $featureValues);
+    $this->addFeatureToPersistence($featureNameWithProjectAndUser, $featureValues);
+  }
+
+  /**
+   * Store the feature in the cache
+   * @param string $key Key for the cache
+   * @param string $featureName Name of the feature
+   * @param string $featureValues Value of the feature
+   * @return void
+   */
+  protected function addFeatureToCache($key, $featureName, $featureValues) {
     $multi = $this->redis->multi();
     $multi->hmset($key, $featureValues);
     $multi->sadd("{$this->featureNamespace()}:features", $featureName);
     $multi->exec();
+  }
 
+  /**
+   * Function stores feature in persistent storage.
+   * @param string $key Key for persistence. 
+   * @param string $featureValues Value for the feature
+   * @return
+   */
+  protected function addFeatureToPersistence($key, $featureValues) {
     if(!is_null($this->mysql)) {
       $value = $this->mysql->table($this->mysqlTableName)->where(["key" => $key])->first();
       if(is_null($value)) {

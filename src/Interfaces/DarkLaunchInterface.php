@@ -54,6 +54,13 @@ interface DarkLaunchInterface {
   public function enableFeature($featureName, $featureValues);
 
   /**
+  * Set a Dark Launch feature. But the feature name should contain the project and user name as they will not be appeneded. 
+  * @param $featureNameWithProjectAndUser string - The name of the feature
+  * @param $featureValue array - An associative array of the features keys and values
+  */
+  public function enableFeatureRaw($featureNameWithProjectAndUser, $featureValues);
+
+  /**
   * Disable a dark launch feature
   * @param $feature string - The name of the feature
   */

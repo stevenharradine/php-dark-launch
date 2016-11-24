@@ -115,4 +115,15 @@ class DarkLaunchIntegrationTest extends BaseTest {
     $this->assertEquals(False, $darkLaunchLibrary->feature('test'));
   }
 
+  public function testEnableFeatureRaw() {
+    $testValue = [
+        'type' => 'string',
+        'value' => 'asdf'
+    ];
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($this->redisConnection, $this->mysqlConnection, $initialConfig, 'commerce', 'pkandathil');
+    $darkLaunchLibrary->enableFeature('test', $testValue);
+    $result = json_decode($this->mysqlConnection->table('keys_to_values')->get()->first()->value, true);
+    $this->assertEquals($testValue['value'], $result['value']);
+  }
+
 }

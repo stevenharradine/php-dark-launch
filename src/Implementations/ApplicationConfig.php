@@ -36,7 +36,7 @@ class ApplicationConfig implements ConfigInterface {
       ],
       "staging" => [
         "redis" => [
-          "host" => "data-cache.1jit0g.ng.0001.use1.cache.amazonaws.com",
+          "host" => "data-cache.df4rwc.ng.0001.usw2.cache.amazonaws.com",
           "port" => '6379'
         ],
         "mysql" => [
@@ -49,7 +49,7 @@ class ApplicationConfig implements ConfigInterface {
       ],
       "production" => [
         "redis" => [
-          "host" => "homesolutions-orders.chswslsbflqt.us-west-2.rds.amazonaws.com",
+          "host" => "data-cache.1jit0g.ng.0001.use1.cache.amazonaws.com",
           "port" => '6379'
         ],
         "mysql" => [

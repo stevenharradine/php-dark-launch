@@ -1,6 +1,6 @@
 # PHP Dark Launch
 
-[![Build Status](https://travis-ci.org/telusdigital/php-dark-launch.svg?branch=master)](https://travis-ci.org/telusdigital/php-dark-launch)
+[![Build Status](https://travis-ci.com/telusdigital/php-dark-launch.svg?token=gouGmrevfbqDbDz6v74a&branch=master)](https://travis-ci.com/telusdigital/php-dark-launch)
 
 A PHP library to dark launch features
 

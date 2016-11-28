@@ -305,7 +305,8 @@ class DarkLaunchConfigAccessor implements DarkLaunchInterface
       throw new Exception('Invalid dark launch config: missing feature value');
     }
 
-    $isExternal = (isset($_SERVER['is-external']) ? true : false);
+    $isExternal = (isset($_SERVER['is-external']) && $_SERVER['is-external']) === true ? true : false;
+    $result = true;
     switch($featureValue['value']){
       case 'external': return $isExternal;
       case 'internal': return !$isExternal;

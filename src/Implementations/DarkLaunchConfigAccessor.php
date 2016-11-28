@@ -286,31 +286,36 @@ class DarkLaunchConfigAccessor implements DarkLaunchInterface
     return $result;
   }
 
-  /*
-   * This is a bit convoluted and unnecessary. We should probably just have a check for isInternal()
-   * which returns true/false based on whether a header is set... instead currently we have the
-   * is-external value which is set by the server and passed down when a user is external to the TEN
-   * Then we have the dark launch value of external/internal, which when we use parseTrafficSource() would return the following
-   *
-   * Dark Launch Value Set to External:
-   *  -user has is-external set, we return true
-   *  -user has no header set, we return false
-   *
-   * Dark Launch Value Set to Internal:
-   *  -user has is-external set, we return false (by toggling it)
-   *  -user has no header set, we return true
-   */
+    /*
+     * This is a bit convoluted and unnecessary. We should probably just have a check for isInternal()
+     * which returns true/false based on whether a header is set... instead currently we have the
+     * is-external value which is set by the server and passed down when a user is external to the TEN
+     * Then we have the dark launch value of external/internal, which when we use parseTrafficSource() would return the following
+     *
+     * Dark Launch Value Set to External:
+     *  -user has is-external set as a string of 1, we return true
+     *  -user has is-external set as a string of 0 or no header set, we return false
+     *
+     * Dark Launch Value Set to Internal:
+     *  -user has is-external set as a string of 1 we return false (by toggling it)
+     *  -user has is-external set as a string of 0 or no header set, we return true?
+     */
   public function parseTrafficSource($featureValue) {
+    $return = true;
+
     if(!isset($featureValue['value'])){
       throw new Exception('Invalid dark launch config: missing feature value');
-    }
+    } else {
+      $is_external_header = $_SERVER['is-external'];
+      $is_external = isset($is_external_header) && $is_external_header;
 
-    $isExternal = (isset($_SERVER['is-external']) ? $_SERVER['is-external'] : false);
-    switch($featureValue['value']){
-      case 'external': return $isExternal;
-      case 'internal': return !$isExternal;
+      if ($featureValue['value'] == 'external') {
+        $return = $is_external;
+      } else if ($featureValue['value'] == 'internal') {
+        $return = ! $is_external;
+      }
     }
-    throw new \Exception('Invalid dark launch config. Parse Traffic source only supports values of "external" and "internal"');
+    return $return;
   }
 
   public function parseCookie($featureValue) {

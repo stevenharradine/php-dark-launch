@@ -13,6 +13,7 @@ A PHP library to dark launch features
 - [Usage](#usage)
 - [Running Tests](#running-tests)
 - [Deployment](#deployment)
+- [Updating Dark Launch Values](#update)
 
 ## <a href="installation"></a>Installation
 
@@ -141,3 +142,12 @@ $ vendor/bin/phpunit
 ```
 $ ../../robmorgan/phinx/bin/phinx migrate -c config-phinx.php -e <environment-name>
 ```
+
+## <a href="update"></a> Updating Dark Launch Values
+* Log into the MySQL. That credentials can be found in `src/Implementations/ApplicationConfig.php`
+* Change the value for the key there in the `keys_to_values` table
+* Log into Redis delete the key. The latest value will be picked up and stored in redis
+
+
+
+

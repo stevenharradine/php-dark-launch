@@ -10,9 +10,9 @@ addons:
     - mysql-client-5.6
     - php5
     - php5-redis
-    - php5-gd 
+    - php5-gd
     - php5-mysql
-php: 
+php:
   - '5.6'
 services:
   - redis-server
@@ -33,10 +33,12 @@ deploy:
   - provider: s3
     access_key_id: AKIAJCNZWFQUEXEONSBQ
     secret_access_key:
-      secure: PI9VedHAYcw3wWxGvAcdP/7E83SfjonkBuvGWto9tTod5WJh29AIdP4R72ls1BJFHYlRKcIz6IV3c9u7yx/c8exyZzvWEgKiwGXf474aCGp+T8gnZT6RX07QmWj4LtoCUQysre2joyO715f8wykikZMvsDQ8oRmZ5QmzbTPHukafepecFWHwmH2l3tD/+goSGt5yi97GKuMq5nZMJXYJrft657tc67PIhM1roA0hNwn5hzSB9Z8rPqPaiRwswDg3vpPyRdLlC1wasqvTfQ4CkwoeGyLg5Cf4CsoR4ZzgLp18JlTROJJJ/Q2QHTAwAq4032GKBVC/swYlwZAX8caNwRVBeEIYf8rAdivvcfnuT3Puyc40h9GjjuQsiEtgER0I5Ypuvz0VAwbyd2tlrrPa2c6B3KrSwW2BM6LGF8NZGzsD50wRX+MtN8iPRCE7ZPyTGSVYpmKf0bfCNlcOvZVCcN6Q9lp737hveszPf4/WPgB3esczIczUHWvgIto8gF1pdP2OkHMtUOyeGWFfbI680NVJC+s/2coCRIhXc+7xOVJ1t93IFPZ9jvoZ7H1teT+rcwXQ/3HoEe5OXabrLguPEDVZGMWIuG9Znh9xflOUtNoUWqA9RZlTguYb1C72IgEMyk3pLojANf89FSAwV0Fkm6WlJysDJoo23mra8ukMeWg=
+      secure: XBgmRNVqfngn4apxEE3b32gsfUScirVna6HwM+62yDbEjPX7dXaU0ijFwZ+uKaJO28+0WoshM4XIFAp646DnH25MBbGkgxRLRwaSuADZ47o1N7En5HpFuoZsxhANHjdkq5fRjhRLZc8ON+vgJEOQRmTeW0FJfwRqQ3D9qWcfTqZMouoti2KnLwu1VgrZ7HBDm/Xu8hG+g1FBJQzSeDqir7O4n6cJ0ldHtd0/xUCwDdJ+0HuP2x4MLgrBPCI7kFCJHVnOdJFb6UYY15Dw+jRg0rLUs/L2NCVae9peO3BJ1MC/nBAWFZFt2gsMZ6fvb3yvS3fFVd8tSDjPidpObnhDY2u5vk6lSC3o2IlUQHq/lUM88mZsfwI1g2eHYFismRCz9IZmnzZpxV2fuvH9W3WL1A4y9v/zachaqqNg1zJYdO68A0DjoMEeKKfnj+1QzVKFnrRRDaFy8hUt9CoFhy8udR42qwn2IFW6dOy4EfnUiLxqY8FIYIrFDDSSKqOLJjcri08n1CnNxGBPsqQPKIVE3tmR5NuNmzggNciyyMjLPO9zRqyQSgqjCVTqsf+yfE2AjaM9zIm2xkmLqSr/N9GxLNnKTd2opahcSYLppotq88K1+BD07DFND0uKw+kHwaLTnPuZxedC9Li9BCNxdAwvBN2DJf/rsfjjI7Y6OC90zIA=
     bucket: telus-spork-application
     region: us-east-1
     local-dir: docs
     upload-dir: php-docs/php-dark-launch
     skip_cleanup: true
 
+notifications:
+  slack: telusdigital:83q3kSpUXC7yOeq9PfwHuPMA

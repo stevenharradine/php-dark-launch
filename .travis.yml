@@ -26,3 +26,17 @@ before_script:
 script:
   - vendor/bin/phpunit --coverage-text
 
+before_deploy:
+  - ./vendor/bin/apigen generate -s ./src -d ./docs
+
+deploy:
+  - provider: s3
+    access_key_id: AKIAJCNZWFQUEXEONSBQ
+    secret_access_key:
+      secure: PI9VedHAYcw3wWxGvAcdP/7E83SfjonkBuvGWto9tTod5WJh29AIdP4R72ls1BJFHYlRKcIz6IV3c9u7yx/c8exyZzvWEgKiwGXf474aCGp+T8gnZT6RX07QmWj4LtoCUQysre2joyO715f8wykikZMvsDQ8oRmZ5QmzbTPHukafepecFWHwmH2l3tD/+goSGt5yi97GKuMq5nZMJXYJrft657tc67PIhM1roA0hNwn5hzSB9Z8rPqPaiRwswDg3vpPyRdLlC1wasqvTfQ4CkwoeGyLg5Cf4CsoR4ZzgLp18JlTROJJJ/Q2QHTAwAq4032GKBVC/swYlwZAX8caNwRVBeEIYf8rAdivvcfnuT3Puyc40h9GjjuQsiEtgER0I5Ypuvz0VAwbyd2tlrrPa2c6B3KrSwW2BM6LGF8NZGzsD50wRX+MtN8iPRCE7ZPyTGSVYpmKf0bfCNlcOvZVCcN6Q9lp737hveszPf4/WPgB3esczIczUHWvgIto8gF1pdP2OkHMtUOyeGWFfbI680NVJC+s/2coCRIhXc+7xOVJ1t93IFPZ9jvoZ7H1teT+rcwXQ/3HoEe5OXabrLguPEDVZGMWIuG9Znh9xflOUtNoUWqA9RZlTguYb1C72IgEMyk3pLojANf89FSAwV0Fkm6WlJysDJoo23mra8ukMeWg=
+    bucket: telus-spork-application
+    region: us-east-1
+    local-dir: docs
+    upload-dir: php-docs/php-dark-launch
+    skip_cleanup: true
+

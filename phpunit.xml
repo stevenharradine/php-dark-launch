@@ -1,6 +1,12 @@
-<phpunit bootstrap="src/autoload.php">
+<phpunit bootstrap="src/autoload.php"  convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         strict="true">
   <testsuites>
-    <testsuite name="php-dark-launch">
+    <testsuite name="php-dark-launch" convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         strict="true">
       <directory>tests</directory>
     </testsuite>
   </testsuites>

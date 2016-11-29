@@ -26,6 +26,8 @@ RUN apt-get update && \
   && docker-php-ext-install redis \
   && docker-php-ext-install pdo_mysql
 
+COPY environment/custom.ini /usr/local/etc/php/conf.d/custom.ini
+
 COPY environment/mysql_permissions.sql /
 COPY environment/docker.sh /
 RUN chmod 775 /docker.sh

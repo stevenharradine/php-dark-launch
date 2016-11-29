@@ -168,7 +168,7 @@ class DarkLaunchConfigAccessor implements DarkLaunchInterface
 
     if(!is_null($this->mysql)) {
       $this->mysql->table($this->mysqlTableName)->where([
-        "key" => $key
+        "key" => $featureName
       ])->delete();
     }
   }

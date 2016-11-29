@@ -149,6 +149,7 @@ class DarkLaunchTest extends BaseTest {
     $result = $darkLaunchLibrary->featureEnabled('test');
     $this->assertEquals($expectedResult, $result);
   }
+  
 
   public function testFeatureCookie() {
     $stub = $this->createMock(\Redis::class);

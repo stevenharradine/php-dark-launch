@@ -17,6 +17,8 @@ php:
 services:
   - redis-server
   - mysql
+before_install:
+  - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 before_script:
   - composer install
   - mysql -u root -e 'create database dark_launch;'

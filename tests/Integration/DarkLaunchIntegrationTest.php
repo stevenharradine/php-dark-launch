@@ -59,8 +59,8 @@ class DarkLaunchIntegrationTest extends BaseTest {
 
   public function testLazyLoadFeature() {
     $testValue = [
-        'type' => 'string',
-        'value' => 'asdf'
+      'type' => 'string',
+      'value' => 'asdf'
     ];
     $initialConfig = [
       'test' => $testValue  
@@ -74,9 +74,10 @@ class DarkLaunchIntegrationTest extends BaseTest {
 
   public function testEnableFeatureFunction() {
     $testValue = [
-        'type' => 'string',
-        'value' => 'asdf'
+      'type' => 'string',
+      'value' => 'asdf'
     ];
+    $initialConfig = [];
     $darkLaunchLibrary = new DarkLaunchConfigAccessor($this->redisConnection, $this->mysqlConnection, $initialConfig, 'commerce', 'pkandathil');
     $darkLaunchLibrary->enableFeature('test', $testValue);
     $this->assertEquals($testValue, $darkLaunchLibrary->feature('test'));
@@ -91,6 +92,7 @@ class DarkLaunchIntegrationTest extends BaseTest {
         'type' => 'string',
         'value' => 'asdf2'
     ];
+    $initialConfig = [];
     $darkLaunchLibrary = new DarkLaunchConfigAccessor($this->redisConnection, $this->mysqlConnection, $initialConfig, 'commerce', 'pkandathil');
     $darkLaunchLibrary->enableFeature('test', $testValue);
     $darkLaunchLibrary->enableFeature('test', $testValue2);
@@ -99,6 +101,7 @@ class DarkLaunchIntegrationTest extends BaseTest {
 
   public function testEnableFeatureBadFeatureValue() {
     $testValue = null;
+    $initialConfig = [];
     $darkLaunchLibrary = new DarkLaunchConfigAccessor($this->redisConnection, $this->mysqlConnection, $initialConfig, 'commerce', 'pkandathil');
     $this->expectException(\Exception::class);
     $darkLaunchLibrary->enableFeature('test', $testValue);
@@ -109,6 +112,7 @@ class DarkLaunchIntegrationTest extends BaseTest {
         'type' => 'string',
         'value' => 'asdf'
     ];
+    $initialConfig = [];
     $darkLaunchLibrary = new DarkLaunchConfigAccessor($this->redisConnection, $this->mysqlConnection, $initialConfig, 'commerce', 'pkandathil');
     $darkLaunchLibrary->enableFeature('test', $testValue);
     $darkLaunchLibrary->disableFeature('test', $testValue);
@@ -120,6 +124,7 @@ class DarkLaunchIntegrationTest extends BaseTest {
         'type' => 'string',
         'value' => 'asdf'
     ];
+    $initialConfig = [];
     $darkLaunchLibrary = new DarkLaunchConfigAccessor($this->redisConnection, $this->mysqlConnection, $initialConfig, 'commerce', 'pkandathil');
     $darkLaunchLibrary->enableFeature('test', $testValue);
     $result = json_decode($this->mysqlConnection->table('keys_to_values')->get()->first()->value, true);

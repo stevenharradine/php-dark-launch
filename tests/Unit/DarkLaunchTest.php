@@ -196,6 +196,7 @@ class DarkLaunchTest extends BaseTest {
     $stub = $this->createMock(\Redis::class);
     $stub->method('smembers')
          ->willReturn(['commerce']);
+    $initialConfig = [];
     $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, new Capsule, $initialConfig, 'commerce');
     $this->assertEquals(['commerce'], $darkLaunchLibrary->projects());
   }
@@ -204,6 +205,7 @@ class DarkLaunchTest extends BaseTest {
     $stub = $this->createMock(\Redis::class);
     $stub->method('smembers')
          ->willReturn(['pkandathil']);
+    $initialConfig = [];
     $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, new Capsule, $initialConfig, 'commerce', 'pkandathil');
     $this->assertEquals(['pkandathil'], $darkLaunchLibrary->users());
   }
@@ -254,6 +256,7 @@ class DarkLaunchTest extends BaseTest {
          ->willReturn(null);
     $stub->method('hgetall')
          ->will($this->returnValueMap($map));
+    $initialConfig = [];
     $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, new Capsule, $initialConfig, 'commerce', 'pkandathil');
     $darkLaunchLibrary->enableFeature('test', $testValue);
     $this->assertEquals($testValue, $darkLaunchLibrary->feature('test'));
@@ -262,6 +265,7 @@ class DarkLaunchTest extends BaseTest {
   public function testEnableFeatureBadFeatureValue() {
     $stub = $this->createMock(\Redis::class);
     $testValue = null;
+    $initialConfig = [];
     $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, new Capsule, $initialConfig, 'commerce', 'pkandathil');
     $this->expectException(\Exception::class);
     $darkLaunchLibrary->enableFeature('test', $testValue);
@@ -272,6 +276,7 @@ class DarkLaunchTest extends BaseTest {
     $stub->method('multi')
          ->willReturn($stub);
     $testValue = null;
+    $initialConfig = [];
     $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, new Capsule, $initialConfig, 'commerce', 'pkandathil');
     $darkLaunchLibrary->disableFeature('test', $testValue);
     $this->assertEquals(False, $darkLaunchLibrary->feature('test'));

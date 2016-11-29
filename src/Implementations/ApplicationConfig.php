@@ -16,7 +16,7 @@ class ApplicationConfig implements ConfigInterface {
           "host" => "localhost",
           "port" => "3306",
           "userName" => "root",
-          "password" => "root",
+          "password" => "",
           "database" => "dark_launch",
           "unix_socket" => "/var/run/mysqld/mysqld.sock"
         ]

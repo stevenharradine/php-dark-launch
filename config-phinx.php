@@ -12,7 +12,7 @@ return [
       'host' => "localhost",
       'name' => "dark_launch",
       'user' => "root",
-      'pass' => "root",
+      'pass' => "",
       'port' => "3306",
       "unix_socket" => "/var/run/mysqld/mysqld.sock"
     ],

@@ -149,7 +149,6 @@ class DarkLaunchIntegrationTest extends BaseTest {
 
     $key = "dark-launch:project:global:user:global:feature:test";
     $this->mysqlConnection->table("keys_to_values")->where(["key" => $key])->update(["value" => json_encode($testValue2)]);
-    $result = $this->mysqlConnection->table("keys_to_values")->where(["key" => $key])->first();
     $this->redisConnection->del($key);
 
     $result = $darkLaunchLibrary->featureEnabled('test');

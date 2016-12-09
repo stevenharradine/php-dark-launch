@@ -90,11 +90,18 @@ class DarkLaunchConfigAccessor implements DarkLaunchInterface
 
 
   public function feature($featureName) {
-    $dark_launch_feature = $this->redis->hgetall("{$this->featureNamespace()}:feature:{$featureName}");
+    $key = "{$this->featureNamespace()}:feature:{$featureName}";
+    $dark_launch_feature = $this->redis->hgetall($key);
 
     if(!$dark_launch_feature){
-      $this->setFromConfig($featureName);
-      $dark_launch_feature = $this->redis->hgetall("{$this->featureNamespace()}:feature:{$featureName}");
+      $dark_launch_feature = $this->mysql->table($this->mysqlTableName)->where(["key" => $key])->first();
+      if(is_null($dark_launch_feature)) {
+        $this->setFromConfig($featureName);
+        $dark_launch_feature = $this->redis->hgetall($key);
+      }
+      else{
+        $dark_launch_feature = json_decode($dark_launch_feature->value, true);
+      }
     }
     return $dark_launch_feature ? $dark_launch_feature : $this->returnError($featureName);
   }
@@ -161,14 +168,15 @@ class DarkLaunchConfigAccessor implements DarkLaunchInterface
 
 
   public function disableFeature($featureName) {
+    $key = "{$this->featureNamespace()}:feature:{$featureName}";
     $multi = $this->redis->multi();
-    $this->redis->del("{$this->featureNamespace()}:feature:{$featureName}");
+    $this->redis->del($key);
     $this->redis->srem("{$this->featureNamespace()}:features", $featureName);
     $multi->exec();
 
     if(!is_null($this->mysql)) {
       $this->mysql->table($this->mysqlTableName)->where([
-        "key" => $featureName
+        "key" => $key
       ])->delete();
     }
   }

@@ -251,7 +251,7 @@ class DarkLaunchConfigAccessor implements DarkLaunchInterface
       return FALSE;
     }
 
-    $random_number = rand(0, 100);
+    $random_number = rand(1, 100);
     return $random_number <= $percentage ? TRUE : FALSE;
   }
 

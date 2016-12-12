@@ -157,4 +157,17 @@ class DarkLaunchIntegrationTest extends BaseTest {
     $this->assertEquals($expectedResult, $result);
   }
 
+  public function testPercentageDarkLaunchFunction() {
+    $testValue = [
+      'type' => 'percentage',
+      'value' => 0
+    ];
+    $initialConfig = [];
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($this->redisConnection, $this->mysqlConnection, $initialConfig, 'commerce', 'pkandathil');
+    $darkLaunchLibrary->enableFeature('test', $testValue);
+    for($i = 0; $i < 100; $i++) {
+      $this->assertEquals(false, $darkLaunchLibrary->featureEnabled('test'));
+    }
+  }
+
 }

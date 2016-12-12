@@ -157,7 +157,7 @@ class DarkLaunchIntegrationTest extends BaseTest {
     $this->assertEquals($expectedResult, $result);
   }
 
-  public function testPercentageDarkLaunchFunction() {
+  public function testPercentageDarkLaunchIsOff() {
     $testValue = [
       'type' => 'percentage',
       'value' => 0
@@ -168,6 +168,42 @@ class DarkLaunchIntegrationTest extends BaseTest {
     for($i = 0; $i < 100; $i++) {
       $this->assertEquals(false, $darkLaunchLibrary->featureEnabled('test'));
     }
+  }
+
+  public function testPercentageDarkLaunchIsOn() {
+    $testValue = [
+      'type' => 'percentage',
+      'value' => 100
+    ];
+    $initialConfig = [];
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($this->redisConnection, $this->mysqlConnection, $initialConfig, 'commerce', 'pkandathil');
+    $darkLaunchLibrary->enableFeature('test', $testValue);
+    for($i = 0; $i < 100; $i++) {
+      $this->assertEquals(true, $darkLaunchLibrary->featureEnabled('test'));
+    }
+  }
+
+  public function testPercentageDarkLaunchIsOnAndOff() {
+    $testValue = [
+      'type' => 'percentage',
+      'value' => 30
+    ];
+    $initialConfig = [];
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($this->redisConnection, $this->mysqlConnection, $initialConfig, 'commerce', 'pkandathil');
+    $darkLaunchLibrary->enableFeature('test', $testValue);
+    $gotTrue = null;
+    $gotFalse = null;
+    for($i = 0; $i < 100; $i++) {
+      $result = $darkLaunchLibrary->featureEnabled('test');
+      if($result === true){
+        $gotTrue = $result;
+      }
+      else {
+        $gotFalse = $result;
+      }
+    }
+    $this->assertEquals(true, $gotTrue);
+    $this->assertEquals(false, $gotFalse);
   }
 
 }

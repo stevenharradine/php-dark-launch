@@ -165,7 +165,7 @@ class DarkLaunchIntegrationTest extends BaseTest {
     $initialConfig = [];
     $darkLaunchLibrary = new DarkLaunchConfigAccessor($this->redisConnection, $this->mysqlConnection, $initialConfig, 'commerce', 'pkandathil');
     $darkLaunchLibrary->enableFeature('test', $testValue);
-    for($i = 0; $i < 100; $i++) {
+    for($i = 0; $i < 1000; $i++) {
       $this->assertEquals(false, $darkLaunchLibrary->featureEnabled('test'));
     }
   }
@@ -178,7 +178,7 @@ class DarkLaunchIntegrationTest extends BaseTest {
     $initialConfig = [];
     $darkLaunchLibrary = new DarkLaunchConfigAccessor($this->redisConnection, $this->mysqlConnection, $initialConfig, 'commerce', 'pkandathil');
     $darkLaunchLibrary->enableFeature('test', $testValue);
-    for($i = 0; $i < 100; $i++) {
+    for($i = 0; $i < 1000; $i++) {
       $this->assertEquals(true, $darkLaunchLibrary->featureEnabled('test'));
     }
   }
@@ -193,7 +193,7 @@ class DarkLaunchIntegrationTest extends BaseTest {
     $darkLaunchLibrary->enableFeature('test', $testValue);
     $gotTrue = null;
     $gotFalse = null;
-    for($i = 0; $i < 100; $i++) {
+    for($i = 0; $i < 1000; $i++) {
       $result = $darkLaunchLibrary->featureEnabled('test');
       if($result === true){
         $gotTrue = $result;

@@ -7,12 +7,29 @@ use Telus\Digital\Libraries\ConfigLoader\Implementations\ConfigLoaderFactory;
 use Telus\Digital\Libraries\ConfigLoader\Interfaces\ConfigInterface;
 use Telus\Digital\Libraries\DarkLaunch\Implementations\StagingConfigLoader;
 use Telus\Digital\Libraries\DarkLaunch\Implementations\RedisConnectionLoader;
+use Telus\Digital\Libraries\DarkLaunch\Implementations\DatabaseConnectionLoader;
+use Telus\Digital\Libraries\DarkLaunch\Implementations\ApplicationConfig;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
 class DarkLaunchTest extends BaseTest {
 
+  protected function getMySqlConnection() {
+    $applicationConfig = new ApplicationConfig();
+    $developmentConfig = $applicationConfig->getValue("local-development");
+
+    $host = $developmentConfig['mysql']['host'];
+    $port = $developmentConfig['mysql']['port'];
+    $username = $developmentConfig['mysql']['userName'];
+    $password = $developmentConfig['mysql']['password'];
+    $database = $developmentConfig['mysql']['database'];
+    $pathToUnixSocker = $developmentConfig['mysql']['unix_socket'];
+
+    $mysqlConnection = DatabaseConnectionLoader::getMySqlConnection($host, $port, $database, $username, $password, $pathToUnixSocker);
+    return $mysqlConnection;
+  }
+
   public function testContructInstance() {
-    $darkLaunchLibrary = new DarkLaunchConfigAccessor(new \Redis(), new Capsule);
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor(new \Redis(), $this->getMySqlConnection());
   }
 
   /**
@@ -25,7 +42,7 @@ class DarkLaunchTest extends BaseTest {
 
     $this->assertEquals($darkLaunchValue, $stub->hgetall());
     
-    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, new Capsule);
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, $this->getMySqlConnection());
     $result = $darkLaunchLibrary->featureEnabled('test');
     $this->assertEquals($expectedResult, $result);
   }
@@ -120,7 +137,7 @@ class DarkLaunchTest extends BaseTest {
 
     $_SERVER['is-external'] = true;
     $this->assertEquals($darkLaunchValue, $stub->hgetall());
-    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, new Capsule);
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, $this->getMySqlConnection());
     $result = $darkLaunchLibrary->featureEnabled('test');
     $this->assertEquals($expectedResult, $result);
 
@@ -145,7 +162,7 @@ class DarkLaunchTest extends BaseTest {
          ->willReturn($darkLaunchValue);
     $_SERVER['is-external'] = true;
     $this->assertEquals($darkLaunchValue, $stub->hgetall());
-    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, new Capsule);
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, $this->getMySqlConnection());
     $result = $darkLaunchLibrary->featureEnabled('test');
     $this->assertEquals($expectedResult, $result);
   }
@@ -161,7 +178,7 @@ class DarkLaunchTest extends BaseTest {
          ->willReturn($darkLaunchValue);
 
     $_COOKIE['cookieName'] = 'true';
-    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, new Capsule);
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, $this->getMySqlConnection());
     $result = $darkLaunchLibrary->featureEnabled('test');
     $this->assertEquals($expectedResult, $result);
 
@@ -186,7 +203,7 @@ class DarkLaunchTest extends BaseTest {
     $stub->method('multi')
          ->willReturn($stub);
 
-    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, new Capsule, $initialConfig);
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, $this->getMySqlConnection(), $initialConfig);
     $result = $darkLaunchLibrary->featureEnabled('test');
     $expectedResult = 'asdf';
     $this->assertEquals($expectedResult, $result);
@@ -197,7 +214,7 @@ class DarkLaunchTest extends BaseTest {
     $stub->method('smembers')
          ->willReturn(['commerce']);
     $initialConfig = [];
-    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, new Capsule, $initialConfig, 'commerce');
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, $this->getMySqlConnection(), $initialConfig, 'commerce');
     $this->assertEquals(['commerce'], $darkLaunchLibrary->projects());
   }
 
@@ -206,7 +223,7 @@ class DarkLaunchTest extends BaseTest {
     $stub->method('smembers')
          ->willReturn(['pkandathil']);
     $initialConfig = [];
-    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, new Capsule, $initialConfig, 'commerce', 'pkandathil');
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, $this->getMySqlConnection(), $initialConfig, 'commerce', 'pkandathil');
     $this->assertEquals(['pkandathil'], $darkLaunchLibrary->users());
   }
 
@@ -230,7 +247,7 @@ class DarkLaunchTest extends BaseTest {
     $stub->method('exec')
          ->willReturn($initialConfig);
 
-    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, new Capsule, $initialConfig, 'commerce', 'pkandathil');
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, $this->getMySqlConnection(), $initialConfig, 'commerce', 'pkandathil');
     $this->assertEquals($initialConfig, $darkLaunchLibrary->features());
   }
 
@@ -257,7 +274,7 @@ class DarkLaunchTest extends BaseTest {
     $stub->method('hgetall')
          ->will($this->returnValueMap($map));
     $initialConfig = [];
-    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, new Capsule, $initialConfig, 'commerce', 'pkandathil');
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, $this->getMySqlConnection(), $initialConfig, 'commerce', 'pkandathil');
     $darkLaunchLibrary->enableFeature('test', $testValue);
     $this->assertEquals($testValue, $darkLaunchLibrary->feature('test'));
   }
@@ -266,7 +283,7 @@ class DarkLaunchTest extends BaseTest {
     $stub = $this->createMock(\Redis::class);
     $testValue = null;
     $initialConfig = [];
-    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, new Capsule, $initialConfig, 'commerce', 'pkandathil');
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, $this->getMySqlConnection(), $initialConfig, 'commerce', 'pkandathil');
     $this->expectException(\Exception::class);
     $darkLaunchLibrary->enableFeature('test', $testValue);
   }
@@ -277,7 +294,7 @@ class DarkLaunchTest extends BaseTest {
          ->willReturn($stub);
     $testValue = null;
     $initialConfig = [];
-    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, new Capsule, $initialConfig, 'commerce', 'pkandathil');
+    $darkLaunchLibrary = new DarkLaunchConfigAccessor($stub, $this->getMySqlConnection(), $initialConfig, 'commerce', 'pkandathil');
     $darkLaunchLibrary->disableFeature('test', $testValue);
     $this->assertEquals(False, $darkLaunchLibrary->feature('test'));
   }

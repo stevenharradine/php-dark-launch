@@ -32,7 +32,7 @@ class DatabaseonnectionLoaderTest extends BaseTest {
     $pathToUnixSocker = $developmentConfig['mysql']['unix_socket'];
 
     $mysqlConnection = DatabaseConnectionLoader::getMySqlConnection($host, $port, $database, $username, $password, $pathToUnixSocker);
-    $result = $mysqlConnection->table('keys_to_values')->count();
+    $result = $mysqlConnection->getConnection('dark-launch')->table('keys_to_values')->count();
     $this->assertGreaterThanOrEqual(0, $result, 'Zero or more values in table');
   }
 }

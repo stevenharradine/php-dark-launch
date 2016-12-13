@@ -37,7 +37,7 @@ class DatabaseConnectionLoader implements DatabaseConnectionLoaderInterface {
     if(!empty($pathToUnixSocket)) {
       $config["unix_socket"] = $pathToUnixSocket;
     }
-    $capsule->addConnection($config, 'default');
+    $capsule->addConnection($config, 'dark-launch');
 
     $capsule->setAsGlobal();
     $capsule->bootEloquent();

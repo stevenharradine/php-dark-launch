@@ -41,7 +41,7 @@ class DarkLaunchIntegrationTest extends BaseTest {
 
   protected function tearDown() {
     $this->redisConnection->flushDb();
-    $this->mysqlConnection->table('keys_to_values')->truncate();
+    $this->mysqlConnection->getConnection('dark-launch')->table('keys_to_values')->truncate();
   }
 
   public function testContructInstance() {
@@ -127,7 +127,7 @@ class DarkLaunchIntegrationTest extends BaseTest {
     $initialConfig = [];
     $darkLaunchLibrary = new DarkLaunchConfigAccessor($this->redisConnection, $this->mysqlConnection, $initialConfig, 'commerce', 'pkandathil');
     $darkLaunchLibrary->enableFeature('test', $testValue);
-    $result = json_decode($this->mysqlConnection->table('keys_to_values')->get()->first()->value, true);
+    $result = json_decode($this->mysqlConnection->getConnection('dark-launch')->table('keys_to_values')->get()->first()->value, true);
     $this->assertEquals($testValue['value'], $result['value']);
   }
 
@@ -148,7 +148,7 @@ class DarkLaunchIntegrationTest extends BaseTest {
     $darkLaunchLibrary->enableFeature('test', $testValue);
 
     $key = "dark-launch:project:global:user:global:feature:test";
-    $this->mysqlConnection->table("keys_to_values")->where(["key" => $key])->update(["value" => json_encode($testValue2)]);
+    $this->mysqlConnection->getConnection('dark-launch')->table("keys_to_values")->where(["key" => $key])->update(["value" => json_encode($testValue2)]);
     $this->redisConnection->del($key);
 
     $result = $darkLaunchLibrary->featureEnabled('test');

@@ -94,7 +94,7 @@ class DarkLaunchConfigAccessor implements DarkLaunchInterface
     $dark_launch_feature = $this->redis->hgetall($key);
 
     if(!$dark_launch_feature){
-      $dark_launch_feature = $this->mysql->table($this->mysqlTableName)->where(["key" => $key])->first();
+      $dark_launch_feature = $this->mysql->getConnection('dark-launch')->table($this->mysqlTableName)->where(["key" => $key])->first();
       if(is_null($dark_launch_feature)) {
         $this->setFromConfig($featureName);
         $dark_launch_feature = $this->redis->hgetall($key);
@@ -153,15 +153,15 @@ class DarkLaunchConfigAccessor implements DarkLaunchInterface
    */
   protected function addFeatureToPersistence($key, $featureValues) {
     if(!is_null($this->mysql)) {
-      $value = $this->mysql->table($this->mysqlTableName)->where(["key" => $key])->first();
+      $value = $this->mysql->getConnection('dark-launch')->table($this->mysqlTableName)->where(["key" => $key])->first();
       if(is_null($value)) {
-        $this->mysql->table($this->mysqlTableName)->insert([
+        $this->mysql->getConnection('dark-launch')->table($this->mysqlTableName)->insert([
           "key" => $key,
           "value" => json_encode($featureValues)
         ]);
       }
       else{
-        $this->mysql->table($this->mysqlTableName)->where(["key" => $key])->update(["value" => json_encode($featureValues)]);
+        $this->mysql->getConnection('dark-launch')->table($this->mysqlTableName)->where(["key" => $key])->update(["value" => json_encode($featureValues)]);
       }
     }
   }
@@ -175,7 +175,7 @@ class DarkLaunchConfigAccessor implements DarkLaunchInterface
     $multi->exec();
 
     if(!is_null($this->mysql)) {
-      $this->mysql->table($this->mysqlTableName)->where([
+      $this->mysql->getConnection('dark-launch')->table($this->mysqlTableName)->where([
         "key" => $key
       ])->delete();
     }

@@ -15,7 +15,7 @@ class DatabaseConnectionLoader implements DatabaseConnectionLoaderInterface {
     ini_set("default_socket_timeout", 1);
     $result = $redis->pconnect($host, $port);
     if($result === false){
-      throw \Exception('Unable to connect to Redis');
+      throw new \Exception('Unable to connect to Redis');
     }
     return $redis;
   }

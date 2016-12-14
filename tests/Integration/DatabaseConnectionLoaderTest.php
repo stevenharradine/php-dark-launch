@@ -20,6 +20,16 @@ class DatabaseonnectionLoaderTest extends BaseTest {
     $this->assertEquals($redisConnection->ping(), '+PONG');
   }
 
+  public function testContructRedisInstanceFails() {
+    $applicationConfig = new ApplicationConfig();
+    $developmentConfig = $applicationConfig->getValue("local-development");
+
+    $redisHost = 'asdf';
+    $redisPort = $developmentConfig['redis']['port'];
+    $this->expectException(\PHPUnit_Framework_Error_Warning::class);
+    $redisConnection = DatabaseConnectionLoader::getRedisConnection($redisHost, $redisPort);
+  }
+
   public function testConstructDatabaseInstance() {
     $applicationConfig = new ApplicationConfig();
     $developmentConfig = $applicationConfig->getValue("local-development");

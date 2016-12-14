@@ -35,6 +35,20 @@ class ApplicationConfig implements ConfigInterface {
           "unix_socket" => "/var/run/mysqld/mysqld.sock"
         ]
       ],
+      "integrated-development-docker-laravel" => [
+        "redis" => [
+          "host" => "redis",
+          "port" => '6379'
+        ],
+        "mysql" => [
+          "host" => "mariadb",
+          "port" => "3306",
+          "userName" => "root",
+          "password" => "",
+          "database" => "dark_launch",
+          "unix_socket" => false
+        ]
+      ],
       "staging" => [
         "redis" => [
           "host" => "data-cache.df4rwc.ng.0001.usw2.cache.amazonaws.com",

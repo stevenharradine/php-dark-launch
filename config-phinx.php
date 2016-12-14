@@ -24,6 +24,14 @@ return [
       "pass" => "",
       "name" => "dark_launch"
     ],
+    'integrated-development-docker-laravel' => [
+      'adapter' => 'mysql',
+      "host" => "mariadb",
+      "port" => "3306",
+      "user" => "root",
+      "pass" => "",
+      "name" => "dark_launch"
+    ],
     'staging' => [
       'adapter' => 'mysql',
       "host" => "homesolutions-orders.chswslsbflqt.us-west-2.rds.amazonaws.com",
